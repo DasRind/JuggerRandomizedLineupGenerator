@@ -1,0 +1,154 @@
+<section class="generator">
+  <header class="head">
+    <h2 class="h2">GENERATOR</h2>
+
+    <div
+      class="seg"
+      [formGroup]="form"
+      role="tablist"
+      aria-label="Ketten-Option"
+    >
+      <label class="seg-btn" [class.active]="form.value.mode === 'withChain'">
+        <input
+          class="visually-hidden"
+          type="radio"
+          value="withChain"
+          formControlName="mode"
+        />
+        <span>Kette save</span>
+      </label>
+      <label class="seg-btn" [class.active]="form.value.mode === 'maybe'">
+        <input
+          class="visually-hidden"
+          type="radio"
+          value="maybe"
+          formControlName="mode"
+        />
+        <span>vielleicht Kette?</span>
+      </label>
+      <label class="seg-btn" [class.active]="form.value.mode === 'noChain'">
+        <input
+          class="visually-hidden"
+          type="radio"
+          value="noChain"
+          formControlName="mode"
+        />
+        <span>ohne Kette?!</span>
+      </label>
+    </div>
+
+    <label class="cb" [formGroup]="form" style="justify-self: end">
+      <input type="checkbox" formControlName="equalize" />
+      <span>gleiche Spielzeit</span>
+    </label>
+
+    <button class="btn big primary" type="button" (click)="generate()">
+      GENERIEREN
+    </button>
+  </header>
+
+  @if (error()) {
+  <p class="error">{{ error() }}</p>
+  } @if (topRow().length === 4 && quickSlot()) {
+  <div class="formation" [class.anim-on]="animGate()">
+    <div class="line" #lineupBlock>
+      @for (s of topRow(); let idx = $index; track trackTop(idx, s)) {
+      <article class="slot-card anim" [ngStyle]="animStyle('top', idx)">
+        <figure class="avatar">
+          <img [src]="s.player.profilePicture" [alt]="s.player.name" />
+        </figure>
+        <div class="name">{{ s.player.name }}</div>
+        <div class="tag">{{ s.kindLabel }}</div>
+      </article>
+      }
+    </div>
+
+    <div class="quick">
+      @if (quickSlot(); as q) { @for (_ of [q]; track trackByQuick()) {
+      <article
+        class="slot-card quick-card anim"
+        [ngStyle]="animStyle('quick', 0)"
+      >
+        <figure class="avatar">
+          <img [src]="q.player.profilePicture" [alt]="q.player.name" />
+        </figure>
+        <div class="name">{{ q.player.name }}</div>
+        <div class="tag">{{ q.kindLabel }}</div>
+      </article>
+      } }
+    </div>
+  </div>
+  }
+
+  <!-- Spiele / Verläufe -->
+  <hr class="big-sep" />
+  <section class="games">
+    @for (g of games(); let gi = $index; track g.id) {
+    <article class="game" [class.closed]="g.closed">
+      <header class="game-head">
+        <div class="title">
+          <span>Spiel gegen&nbsp;</span>
+          @if (gi === currentGameIndex() && !g.closed) {
+          <input
+            class="input"
+            type="text"
+            [formControl]="opponentCtrl"
+            placeholder="Teamname"
+          />
+          } @else {
+          <strong>{{ g.opponent || "unbekannt" }}</strong>
+          }
+        </div>
+
+        <div class="actions">
+          @if (gi === currentGameIndex() && !g.closed) {
+          <button class="btn sm" type="button" (click)="completeCurrentGame()">
+            Spiel abgeschlossen
+          </button>
+          }
+          <button class="btn sm ghost" type="button" (click)="exportGame(gi)">
+            Exportieren
+          </button>
+        </div>
+      </header>
+
+      @if (g.history.length === 0) {
+      <div class="empty">Noch keine Aufstellungen…</div>
+      } @else {
+      <div class="history-list">
+        @for (h of g.history; track h.time) {
+        <article class="hist-item">
+          <div class="meta">
+            <span class="mode">
+              @if (h.mode === 'withChain') { Kette save } @else if (h.mode ===
+              'noChain') { ohne Kette?! } @else { vielleicht Kette? }
+            </span>
+            <span class="time">{{ formatTime(h.time) }}</span>
+          </div>
+
+          <div class="rows">
+            <div class="row row-top">
+              @for (p of h.top; let idx = $index; track idx) {
+              <span class="pill">
+                <span class="pos">{{ idx + 1 }}</span>
+                <span class="name">{{ p.name }}</span>
+                <span class="label">– {{ p.label }}</span>
+              </span>
+              }
+            </div>
+            <div class="row row-quick">
+              <span class="pill quick-pill">
+                <span class="pos">Q</span>
+                <span class="name">{{ h.quick.name }}</span>
+                <span class="label">– {{ h.quick.label }}</span>
+              </span>
+            </div>
+          </div>
+        </article>
+        }
+      </div>
+      }
+    </article>
+    }
+  </section>
+</section>

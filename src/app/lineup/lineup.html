@@ -1,0 +1,243 @@
+<header class="topbar">
+  <div class="left">
+    <button
+      class="arrow"
+      type="button"
+      (click)="toggleExpanded()"
+      [attr.aria-expanded]="expanded()"
+      title="Bereich ein-/ausklappen"
+    >
+      <span class="chev"></span>
+    </button>
+    <h2 class="h2">KADER</h2>
+
+    <input
+      class="team-input"
+      type="text"
+      placeholder="Teamname"
+      [formControl]="teamNameCtrl"
+    />
+  </div>
+
+  <div class="actions">
+    <button class="btn sm" (click)="save()">Speichern</button>
+
+    <!-- versteckter File-Input zum Laden -->
+    <input
+      #loadInput
+      type="file"
+      class="visually-hidden"
+      accept=".randomizer,application/json,.json"
+      (change)="onLoadPicked($event)"
+    />
+    <button class="btn sm ghost" (click)="load()">Laden</button>
+  </div>
+</header>
+
+@if (expanded()) {
+<hr class="big-sep" />
+}
+
+<section class="content" [class.collapsed]="!expanded()">
+  <div class="grid">
+    <!-- Linke Seite: Liste -->
+    <section class="list">
+      @if (players().length === 0) {
+      <div class="empty">Noch keine Spieler hinzugefügt…</div>
+      } @else { @for (p of players(); track p.name + p.profilePicture; let i =
+      $index) {
+      <article class="row">
+        <figure class="avatar">
+          <img [src]="p.profilePicture" [alt]="p.name" />
+        </figure>
+
+        <div class="info">
+          <div class="name">{{ p.name }}</div>
+          <div class="chips">
+            @for (chip of chipList(p); track $index) {
+            <span class="chip">{{ chip }}</span>
+            }
+          </div>
+        </div>
+
+        <div class="row-actions">
+          <button class="icon" title="Bearbeiten" (click)="startEdit(i)">
+            ✏️
+          </button>
+          <button class="icon danger" title="Löschen" (click)="delete(i)">
+            ✕
+          </button>
+        </div>
+      </article>
+
+      <hr class="sep" />
+      } }
+    </section>
+
+    <!-- Rechte Seite: Formular -->
+    <section class="form" #formBlock>
+      <h2 class="h2">
+        @if (editingIndex() === null) { Neuen Spieler hinzufügen } @else {
+        Spieler bearbeiten }
+      </h2>
+
+      <form [formGroup]="addForm" (ngSubmit)="submitForm()" class="card">
+        <!-- Bild + Name -->
+        <div class="row2">
+          <label class="avatar pick" title="Profilbild wählen">
+            <input
+              type="file"
+              accept="image/*"
+              (change)="onPickImage($event)"
+              class="visually-hidden"
+            />
+            <img
+              class="preview"
+              [src]="addForm.controls.profileFile.value"
+              alt="Profilbild Vorschau"
+            />
+          </label>
+
+          <input
+            class="input grow"
+            type="text"
+            placeholder="Name"
+            formControlName="name"
+          />
+        </div>
+
+        <!-- Laufen -->
+        <h3 class="h3">Laufen</h3>
+        <label class="cb">
+          <input type="checkbox" formControlName="quick" />
+          <span>{{ quickLabel }}</span>
+        </label>
+
+        <div class="divider"></div>
+
+        <div class="cols">
+          <!-- Pompfen -->
+          <div class="extras">
+            <h3 class="h3">Pompfen</h3>
+
+            <!-- Basis -->
+            <label class="cb"
+              ><input type="checkbox" formControlName="LP" />
+              <span>Langpompfe (LP)</span></label
+            >
+            <label class="cb"
+              ><input type="checkbox" formControlName="Schild" />
+              <span>Kurz + Schild (Schild)</span></label
+            >
+            <label class="cb"
+              ><input type="checkbox" formControlName="Stab" />
+              <span>Stab (Stab)</span></label
+            >
+            <label class="cb"
+              ><input type="checkbox" formControlName="QTip" />
+              <span>Q-Tip (Q)</span></label
+            >
+
+            <!-- Globale Extras -->
+            <div class="extras-list">
+              @for (opt of globalSparExtras(); track opt) {
+              <label class="cb with-x">
+                <input
+                  type="checkbox"
+                  [checked]="hasSparExtra(opt)"
+                  (change)="toggleSparExtra(opt)"
+                />
+                <span>{{ opt }}</span>
+                <button
+                  type="button"
+                  class="x"
+                  (click)="removeGlobalSparExtra(opt)"
+                >
+                  ×
+                </button>
+              </label>
+              }
+            </div>
+
+            <!-- Eingabe für neue Extras -->
+            <div class="addline">
+              <input
+                class="input"
+                type="text"
+                placeholder="Weitere Pompfe (z. B. Doppel-Stab)"
+                formControlName="sparExtraInput"
+              />
+              <button class="btn xs" type="button" (click)="addSparExtra()">
+                +
+              </button>
+            </div>
+          </div>
+
+          <!-- Kette -->
+          <div class="extras">
+            <h3 class="h3">Kette</h3>
+
+            <!-- Basis -->
+            <label class="cb"
+              ><input type="checkbox" formControlName="chainNormal" />
+              <span>Normal</span></label
+            >
+            <label class="cb"
+              ><input type="checkbox" formControlName="chainOben" />
+              <span>Nur oben (Oben)</span></label
+            >
+
+            <!-- Globale Extras -->
+            <div class="extras-list">
+              @for (opt of globalChainExtras(); track opt) {
+              <label class="cb with-x">
+                <input
+                  type="checkbox"
+                  [checked]="hasChainExtra(opt)"
+                  (change)="toggleChainExtra(opt)"
+                />
+                <span>{{ opt }}</span>
+                <button
+                  type="button"
+                  class="x"
+                  (click)="removeGlobalChainExtra(opt)"
+                >
+                  ×
+                </button>
+              </label>
+              }
+            </div>
+
+            <!-- Eingabe für neue Extras -->
+            <div class="addline">
+              <input
+                class="input"
+                type="text"
+                placeholder="Weitere Variante (z. B. Linkshand)"
+                formControlName="chainExtraInput"
+              />
+              <button class="btn xs" type="button" (click)="addChainExtra()">
+                +
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="cta">
+          @if (editingIndex() === null) {
+          <button class="btn primary" type="submit">Hinzufügen</button>
+          } @else {
+          <button class="btn primary" type="submit">Speichern</button>
+          <button class="btn ghost" type="button" (click)="cancelEdit()">
+            Abbrechen
+          </button>
+          }
+        </div>
+      </form>
+    </section>
+  </div>
+</section>
+@if (expanded()) {
+<hr class="big-sep" />
+}

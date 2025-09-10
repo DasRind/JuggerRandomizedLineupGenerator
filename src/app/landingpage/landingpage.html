@@ -1,0 +1,17 @@
+<section class="hero">
+  <h1 class="title">Jugger Lineup Randomizer</h1>
+  <p class="subtitle">Präsentiert von</p>
+  <div class="brand">JUNGLE&nbsp;DIFF</div>
+
+  <section class="content">
+    <div class="strip">
+      <ng-container *ngFor="let t of tiles(); let i = index">
+        <figure class="frame" [attr.aria-label]="t.alt || 'Player ' + (i + 1)">
+          <img [src]="t.src" [alt]="t.alt || 'Player ' + (i + 1)" />
+        </figure>
+      </ng-container>
+    </div>
+
+    <button class="cta" type="button" (click)="goGenerate()">GENERIEREN</button>
+  </section>
+</section>

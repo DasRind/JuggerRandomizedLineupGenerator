@@ -1,0 +1,112 @@
+$page-w: min(1100px, 94vw);
+
+.page {
+  margin: 0 auto;
+  max-width: $page-w;
+  padding: 20px 0px;
+}
+
+.bar {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  margin-bottom: 24px;
+  .title {
+    margin: 0;
+    text-align: center;
+    font-size: clamp(22px, 3.2vw, 32px);
+  }
+  .spacer {
+    justify-self: end;
+    width: 72px;
+  } /* symmetrisch zur Back-Button-Breite */
+}
+
+.back,
+.ghost {
+  appearance: none;
+  background: none;
+  border: 1px solid #c9d3ea;
+  color: #1f2a37;
+  padding: 8px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.back {
+  justify-self: start;
+}
+.ghost {
+  margin-top: 10px;
+}
+
+.info {
+  background: #f6f8fc;
+  border: 1px solid #d8e2ff;
+  border-radius: 12px;
+  padding: clamp(12px, 2vw, 18px);
+  margin-bottom: 24px;
+  h2 {
+    margin: 0 0 6px;
+    font-size: clamp(18px, 2.4vw, 22px);
+  }
+}
+
+.pre {
+  margin-top: 12px;
+  background: #0b1220;
+  color: #d5e7ff;
+  padding: 12px;
+  border-radius: 10px;
+  overflow: auto;
+  max-height: 40vh;
+}
+
+.layout {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 1fr 1fr;
+  @media (max-width: 860px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.box.placeholder {
+  border: 2px dashed #b8c7e6;
+  border-radius: 12px;
+  padding: 28px;
+  text-align: center;
+  color: #60738a;
+}
+
+.app-header {
+  background: linear-gradient(
+    90deg,
+    #1f2a37,
+    #314d6a
+  ); /* Jungle Diff Überzug */
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: #fff;
+    font-weight: 700;
+    font-size: 20px;
+
+    img {
+      height: 36px;
+      width: auto;
+      border-radius: 6px;
+      object-fit: contain;
+    }
+
+    span {
+      font-family: "Special Elite", ui-monospace, Menlo, Consolas, monospace;
+    }
+  }
+}

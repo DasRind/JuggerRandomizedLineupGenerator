@@ -1,0 +1,44 @@
+<section class="wrap">
+  <h2 class="h2">Kader wählen</h2>
+
+  <div class="cards">
+    <!-- Bestehenden Kader laden (Datei) -->
+    <article class="card">
+      <h3 class="h3">Bestehenden Kader laden</h3>
+      <p class="muted">Lade eine <code>.randomizer</code>-Datei.</p>
+
+      <label class="btn" for="pick-file">Datei auswählen</label>
+      <input
+        id="pick-file"
+        class="visually-hidden"
+        type="file"
+        accept=".randomizer,application/json"
+        (change)="onFilePicked($event)"
+      />
+    </article>
+
+    <!-- Neuen Kader erstellen -->
+    <article class="card">
+      <h3 class="h3">Neuen Kader erstellen</h3>
+      <p class="muted">Starte mit leerem Kader und füge Spieler hinzu.</p>
+      <button class="btn primary" type="button" (click)="goCreateNew()">
+        Neu erstellen
+      </button>
+    </article>
+  </div>
+
+  <hr class="sep" />
+
+  <!-- 👉 Already known Teams -->
+  <section class="known">
+    <h3 class="h3">Already known Teams</h3>
+    <div class="team-list">
+      @for (t of knownTeams; track t.label) {
+      <button class="team-btn" type="button" (click)="loadKnownTeam(t)">
+        <span class="name">{{ t.label }}</span>
+        <span class="meta">Shortcut laden</span>
+      </button>
+      }
+    </div>
+  </section>
+</section>
