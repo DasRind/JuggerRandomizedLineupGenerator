@@ -104,6 +104,7 @@ export class LineupComponent {
 
     if (snapshot?.players?.length) this.players.set([...snapshot.players]);
     if (snapshot?.teamName) this.teamNameCtrl.setValue(snapshot.teamName);
+    if(this.teamNameCtrl.value != "") this.expanded.update(()=> false);
 
     // globale Extras aus vorhandenen Spielern ableiten
     if (snapshot?.players?.length) {
