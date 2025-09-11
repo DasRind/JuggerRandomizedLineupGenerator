@@ -376,7 +376,7 @@ export class LineupComponent {
     });
 
     const team = (lineup.teamName || 'unbenannt').replace(/[^\w\-]+/g, '_');
-    const filename = `${team}-${formatNow()}.randomizer`;
+    const filename = `${team}.randomizer`;
 
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -476,19 +476,6 @@ function fileToDataUrl(file: File): Promise<string> {
     r.onload = () => res(String(r.result));
     r.readAsDataURL(file);
   });
-}
-
-function formatNow(): string {
-  const d = new Date();
-  const pad = (n: number) => String(n).padStart(2, '0');
-  return (
-    d.getFullYear().toString() +
-    pad(d.getMonth() + 1) +
-    pad(d.getDate()) +
-    '-' +
-    pad(d.getHours()) +
-    pad(d.getMinutes())
-  );
 }
 
 function isLineup(x: any): x is Lineup {
