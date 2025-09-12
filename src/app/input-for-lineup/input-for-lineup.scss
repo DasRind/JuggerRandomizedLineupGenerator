@@ -95,6 +95,9 @@ $blue-border: #7d92bf;
     padding: 10px 16px;
     border-radius: 12px;
     font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 
     &.primary {
       background: #b7e9c3;
