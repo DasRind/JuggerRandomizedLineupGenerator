@@ -657,6 +657,9 @@ $blue-border: #7d92bf;
     background: #e6efff;
     border: 1px solid #96a9d4;
     font-size: 12px;
+    flex-wrap: wrap;           /* allow wrapping inside pill */
+    max-width: 100%;
+    min-width: 0;
 
     .pos {
       font-weight: 700;
@@ -665,9 +668,14 @@ $blue-border: #7d92bf;
     }
     .name {
       font-weight: 600;
+      overflow-wrap: anywhere; /* break long names */
+      word-break: break-word;
     }
     .label {
       color: $ink;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+      white-space: normal;
     }
   }
 
@@ -730,4 +738,46 @@ $blue-border: #7d92bf;
   .slot-card:not(.skeleton)::before {
     animation: none !important;
   }
+}
+
+/* --- Extra small screens (≤360px) --- */
+@media (max-width: 360px) {
+  .formation .line { gap: 6px; justify-items: center; }
+  .slot-card { padding: 6px; gap: 4px; border-radius: 12px; }
+  .slot-card .avatar {
+    width: clamp(40px, 16vw, 70px);
+    height: clamp(40px, 16vw, 70px);
+    border-width: 1px;
+    border-radius: 10px;
+    justify-self: center; /* ensure avatar centers in narrow cells */
+  }
+  .slot-card .name { font-size: 12px; }
+  .slot-card .tag { font-size: 10px; padding: 2px 6px; }
+
+  /* History + Kopfbereich Kompakt */
+  .game-head { gap: 8px; align-items: flex-start; }
+  .game-head .title { flex: 1 1 100%; }
+  .game-head .title .input { width: 100%; min-width: 0; }
+  .game-head .actions { width: 100%; flex-wrap: wrap; gap: 6px; justify-content: flex-start; }
+  .game-head .actions .btn { padding: 6px 8px; font-size: 12px; border-radius: 8px; }
+
+  .history-list { gap: 6px; }
+  .hist-item { padding: 8px; }
+  .hist-item .meta { flex-wrap: wrap; gap: 6px; }
+  .hist-item .pill { font-size: 11px; padding: 3px 6px; }
+}
+
+/* --- Ultra small screens (≤300px) --- */
+@media (max-width: 300px) {
+  .formation .line { gap: 4px; }
+  .slot-card { padding: 4px; gap: 3px; }
+  .slot-card .avatar {
+    width: clamp(40px, 16vw, 92px);
+    height: clamp(40px, 16vw, 92px);
+  }
+  .slot-card .name { font-size: 11px; }
+  .slot-card .tag { font-size: 9px; padding: 2px 5px; }
+
+  .game-head .actions .btn { padding: 5px 6px; font-size: 11px; }
+  .hist-item .pill { font-size: 10px; padding: 2px 5px; }
 }

@@ -17,6 +17,12 @@ $brand-blue-soft: #cfe0ff;
   justify-content: space-between;
   gap: 12px;
   box-shadow: 0 2px 0 rgba(255,255,255,0.06) inset, 0 8px 18px rgba(0,0,0,0.18);
+
+  /* Very small screens: keep one row; let .nav wrap internally */
+  @media (max-width: 420px) {
+    flex-wrap: nowrap;
+    align-items: flex-start;
+  }
 }
 
 .brand {
@@ -25,11 +31,17 @@ $brand-blue-soft: #cfe0ff;
   gap: 10px;
   text-decoration: none;
   color: #fff;
+  flex: 0 0 auto;
 }
 .brand .logo { width: 34px; height: 34px; object-fit: contain; border-radius: 6px; background: #fff; box-shadow: 0 0 0 2px rgba(255,255,255,0.2) inset; }
 .brand .title {
   font-weight: 800;
   letter-spacing: 0.02em;
+}
+
+@media (max-width: 380px) {
+  .brand .title { display: none; }
+  .brand .logo { width: 30px; height: 30px; }
 }
 
 .nav { display: inline-flex; align-items: center; gap: 14px; }
@@ -53,7 +65,19 @@ $brand-blue-soft: #cfe0ff;
 }
 .nav .link .ico { width: 16px; height: 16px; object-fit: contain; filter: brightness(0) invert(1); }
 .nav .link.ext::after {
-  content: '↗';
+  content: '→';
   margin-left: 6px;
   font-size: 12px;
 }
+
+/* Mobile tweaks for small widths */
+@media (max-width: 420px) {
+  .nav { flex: 1 1 auto; min-width: 0; flex-wrap: wrap; gap: 8px; justify-content: flex-end; }
+  .nav .link { padding: 6px 8px; font-weight: 600; }
+}
+@media (max-width: 320px) {
+  .nav { gap: 6px; }
+  .nav .link { padding: 5px 6px; font-size: 12px; border-radius: 8px; }
+  .nav .link .ico { width: 14px; height: 14px; }
+}
+

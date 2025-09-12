@@ -398,6 +398,13 @@ $blue-border: #7d92bf;
 }
 
 /* Ausklappbarer Bereich */
+
+/* --- Small-screen tweaks for toolbar/buttons --- */
+@media (max-width: 420px) {
+  .topbar .actions { flex-wrap: wrap; justify-content: flex-start; gap: 8px; }
+  .topbar .actions .btn { padding: 6px 10px; }
+  .team-input { width: min(220px, 70vw); }
+}
 .content {
   overflow: hidden;
   transition: grid-template-rows 0.18s ease, margin 0.18s ease;
