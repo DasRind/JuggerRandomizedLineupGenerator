@@ -126,9 +126,15 @@ export class InputForLineupComponent {
     return KNOWN_TEAMS;
   }
 
+  loadDemo() {
+    const first = this.knownTeams[0];
+    if (first) this.loadKnownTeam(first);
+    else this.goCreateNew();
+  }
+
   goCreateNew() {
     // leere Auswahl -> nur Mainpage öffnen
     this.lineupService.setLineup({ teamName: undefined, players: [] });
-    this.router.navigateByUrl('/mainpage');
+    this.router.navigateByUrl('/kader');
   }
 }

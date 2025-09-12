@@ -24,7 +24,8 @@ $blue-border: #7d92bf;
 .h2 {
   font-family: "Special Elite", ui-monospace, SFMono-Regular, Menlo, Consolas,
     monospace;
-  font-size: clamp(20px, 2.8vw, 28px);
+  font-size: clamp(18px, 4.5vw, 26px);
+  letter-spacing: 0.02em;
 }
 .h3 {
   font-size: 16px;
@@ -41,13 +42,16 @@ $blue-border: #7d92bf;
   padding: 8px 14px;
   border-radius: 10px;
   font-weight: 600;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
 
   &.sm {
     padding: 6px 12px;
     border-radius: 8px;
   }
   &.xs {
-    padding: 4px 8px;
+    padding: 4px 14px;
     border-radius: 8px;
     font-size: 12px;
   }
@@ -57,7 +61,6 @@ $blue-border: #7d92bf;
   &.primary {
     background: #b7e9c3;
     border-color: #7ebf8a;
-    margin-bottom: 5px;
   }
 }
 
@@ -82,8 +85,8 @@ $blue-border: #7d92bf;
 .list {
   border-right: 1px solid $line;
   padding-right: 12px;
-  max-height: 710px;
-  overflow-y: auto;
+  max-height: none; /* volle Höhe auf eigener Seite */
+  overflow: visible;
 
   @media (max-width: 980px) {
     border-right: none;
@@ -97,6 +100,84 @@ $blue-border: #7d92bf;
   grid-template-columns: auto 1fr auto;
   gap: 12px;
   align-items: center;
+}
+
+/* XS: sehr schmal (<=450px) – vertikale Button-Leiste links */
+@media (max-width: 450px) {
+  .row {
+    grid-template-columns: 28px auto 1fr; /* Aktionen | Avatar | Info */
+    grid-template-areas: "actions avatar info";
+    column-gap: 8px;
+    row-gap: 4px;
+    align-items: center;
+  }
+  .row .avatar {
+    grid-area: avatar;
+  }
+  .row .info {
+    grid-area: info;
+  }
+  .row .row-actions {
+    grid-area: actions;
+    justify-self: start;
+    align-self: center;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin: 0 0 0 8px; /* linker Innenabstand wie column-gap */
+  }
+  .icon {
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    padding: 0;
+  }
+  .chips {
+    gap: 4px;
+  }
+  .chip {
+    padding: 3px 6px;
+    font-size: 11px;
+  }
+}
+
+/* S: 451–520px – wie XS, aber etwas größer */
+@media (min-width: 451px) and (max-width: 520px) {
+  .row {
+    grid-template-columns: 32px auto 1fr; /* Aktionen | Avatar | Info */
+    grid-template-areas: "actions avatar info";
+    column-gap: 10px;
+    row-gap: 6px;
+    align-items: center;
+  }
+  .row .avatar {
+    grid-area: avatar;
+  }
+  .row .info {
+    grid-area: info;
+  }
+  .row .row-actions {
+    grid-area: actions;
+    justify-self: start;
+    align-self: center;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 0 0 0 10px; /* linker Innenabstand wie column-gap */
+  }
+  .icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    padding: 0;
+  }
+  .chips {
+    gap: 5px;
+  }
+  .chip {
+    padding: 4px 8px;
+    font-size: 12px;
+  }
 }
 .sep {
   border: 0;
@@ -115,8 +196,10 @@ $blue-border: #7d92bf;
   margin-bottom: 5px;
 
   @media (max-width: 450px) {
-    margin-left: 10px;
-    margin-right: 10px;
+    margin-left: 6px;
+    margin-right: 6px;
+    width: 56px;
+    height: 56px;
   }
 
   img,
@@ -149,7 +232,7 @@ $blue-border: #7d92bf;
 .name {
   font-weight: 700;
   margin-bottom: 8px;
-  font-size: 18px;
+  font-size: clamp(14px, 4vw, 18px);
 }
 .chips {
   display: flex;
@@ -188,10 +271,9 @@ $blue-border: #7d92bf;
 
 /* Formular */
 .form {
-  max-height: 710px;
-  overflow-y: auto;
-  scroll-margin-top: 250px;
+  max-height: none; /* eigene Seite: keine Deckelung */
   overflow: visible;
+  scroll-margin-top: 250px;
 
   @media (max-width: 980px) {
     grid-row: 1;
@@ -298,6 +380,7 @@ $blue-border: #7d92bf;
     display: inline-flex;
     align-items: center;
     gap: 8px;
+    flex-wrap: wrap;
   }
   .actions {
     display: inline-flex;
@@ -306,30 +389,7 @@ $blue-border: #7d92bf;
 }
 
 /* Pfeil-Button */
-.arrow {
-  width: 34px;
-  height: 34px;
-  border-radius: 8px;
-  border: 1px solid #cbd5e1;
-  background: #fff;
-  display: grid;
-  place-content: center;
-  cursor: pointer;
-  transition: transform 0.15s ease;
-
-  .chev {
-    width: 10px;
-    height: 10px;
-    display: inline-block;
-    border-right: 3px solid $ink;
-    border-bottom: 3px solid $ink;
-    transform: rotate(-135deg); /* ^ */
-    transition: transform 0.15s ease;
-  }
-  &[aria-expanded="false"] .chev {
-    transform: rotate(45deg); /* v */
-  }
-}
+/* Expand/Collapse entfernt */
 
 .big-sep {
   border: 0;
@@ -368,15 +428,25 @@ $blue-border: #7d92bf;
 .team-input {
   margin-left: 12px;
   padding: 6px 10px;
-  font-size: 16px;
+  font-size: clamp(14px, 3.5vw, 16px);
   border: 1px solid #cbd5e1;
   border-radius: 8px;
-  min-width: 160px;
   outline: none;
+  width: auto;
+  flex: 1 1 auto;
+  max-width: min(220px, 45vw);
 
   &:focus {
     border-color: $blue-border;
     box-shadow: 0 0 0 3px rgba(125, 146, 191, 0.2);
+  }
+}
+
+@media (max-width: 480px) {
+  .team-input {
+    flex: 1 1 100%;
+    max-width: 100%;
+    margin-left: 0;
   }
 }
 
@@ -389,6 +459,13 @@ $blue-border: #7d92bf;
   margin: -1px;
   overflow: hidden;
   clip: rect(0 0 0 0);
+  $page-w: min(1100px, 94vw);
+
+  .page {
+    margin: 0 auto;
+    max-width: $page-w;
+    padding: 20px clamp(10px, 3vw, 16px);
+  }
   white-space: nowrap;
   border: 0;
 }

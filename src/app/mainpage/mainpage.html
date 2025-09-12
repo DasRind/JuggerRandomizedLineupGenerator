@@ -1,10 +1,7 @@
+<app-site-header></app-site-header>
 <div class="page">
-  <header class="app-header">
-    <a class="brand" [routerLink]="['/landingpage']">
-      <span>Jugger Lineup Randomizer</span>
-    </a>
-  </header>
-
-  <app-lineup></app-lineup>
-  <app-generator></app-generator>
+  <router-outlet></router-outlet>
+  
+  <!-- Fallback: Zeige Generator, falls kein Child gesetzt ist -->
+  <!-- Optional: könnte per Redirect in Routes gelöst sein -->
 </div>

@@ -4,7 +4,7 @@ $blue-border: #7d92bf;
 
 /* Hero: volle Höhe, Inhalt mittig */
 .hero {
-  min-height: 100vh; /* volle Bildschirmhöhe */
+  min-height: 100svh; /* mobile-freundliche volle Höhe */
   display: flex;
   flex-direction: column;
   justify-content: center; /* vertikal mittig */
@@ -65,6 +65,10 @@ $blue-border: #7d92bf;
   /* Responsive: Umbrechen bei sehr kleinen Screens */
   @media (max-width: 640px) {
     flex: 1 1 calc(100% / 3);
+  }
+  @media (max-width: 420px) {
+    flex: 1 1 calc(100% / 2);
+    margin: 4px;
   }
 }
 

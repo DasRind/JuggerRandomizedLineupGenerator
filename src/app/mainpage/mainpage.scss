@@ -3,7 +3,16 @@ $page-w: min(1100px, 94vw);
 .page {
   margin: 0 auto;
   max-width: $page-w;
-  padding: 20px 0px;
+  padding: 20px clamp(10px, 3vw, 16px);
+
+  /* Auf sehr kleinen Screens Platz maximieren */
+  @media (max-width: 540px) {
+    max-width: 100vw;
+    padding-left: max(6px, env(safe-area-inset-left));
+    padding-right: max(6px, env(safe-area-inset-right));
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
 }
 
 .bar {
@@ -96,7 +105,7 @@ $page-w: min(1100px, 94vw);
     text-decoration: none;
     color: #fff;
     font-weight: 700;
-    font-size: 20px;
+    font-size: clamp(18px, 2.6vw, 22px);
 
     img {
       height: 36px;

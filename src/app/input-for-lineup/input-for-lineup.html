@@ -1,11 +1,15 @@
 <section class="wrap">
-  <h2 class="h2">Kader wählen</h2>
+  <div class="hero">
+    <button class="btn hero primary" type="button" (click)="loadDemo()">
+      ✨ Demo starten
+    </button>
+  </div>
 
   <div class="cards">
     <!-- Bestehenden Kader laden (Datei) -->
-    <article class="card">
-      <h3 class="h3">Bestehenden Kader laden</h3>
-      <p class="muted">Lade eine <code>.randomizer</code>-Datei.</p>
+    <article class="card card-load">
+      <h3 class="h3"><span class="ico">📂</span> Bestehenden Kader laden</h3>
+      <p class="muted">Wähle eine <code>.randomizer</code>-Datei von deinem Gerät.</p>
 
       <label class="btn" for="pick-file">Datei auswählen</label>
       <input
@@ -18,9 +22,9 @@
     </article>
 
     <!-- Neuen Kader erstellen -->
-    <article class="card">
-      <h3 class="h3">Neuen Kader erstellen</h3>
-      <p class="muted">Starte mit leerem Kader und füge Spieler hinzu.</p>
+    <article class="card card-new">
+      <h3 class="h3"><span class="ico">➕</span> Neuen Kader erstellen</h3>
+      <p class="muted">Starte leer und füge Spieler, Rollen und Bilder hinzu.</p>
       <button class="btn primary" type="button" (click)="goCreateNew()">
         Neu erstellen
       </button>
@@ -31,7 +35,7 @@
 
   <!-- 👉 Already known Teams -->
   <section class="known">
-    <h3 class="h3">Already known Teams</h3>
+    <h3 class="h3">Schnellladen</h3>
     <div class="team-list">
       @for (t of knownTeams; track t.label) {
       <button class="team-btn" type="button" (click)="loadKnownTeam(t)">

@@ -6,6 +6,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormControl } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 import { LineupService } from '../lineup-service';
 import { Lineup, Player } from '../_interfaces/lineupInterface';
 import { NgStyle } from '@angular/common';
@@ -34,7 +35,7 @@ const TEAM_SIZE = 5;
 @Component({
   selector: 'app-generator',
   standalone: true,
-  imports: [ReactiveFormsModule, NgStyle],
+  imports: [ReactiveFormsModule, NgStyle, RouterModule],
   templateUrl: './generator.html',
   styleUrls: ['./generator.scss'],
 })
@@ -84,6 +85,10 @@ export class GeneratorComponent {
   }
 
   animGate = signal(false); // false = ausgeblendet (Reset), true = animieren
+  bursting = signal(false); // Button-Burst-Effekt
+  private burstTimer: any;
+
+  // Slider-Thumb entfernt – Modus wird nur noch per Buttons gewählt
 
   private triggerAllAnimations() {
     // erst schließen (alles unsichtbar/ohne Animation) …
@@ -187,6 +192,14 @@ export class GeneratorComponent {
   /* ---------- Generieren ---------- */
 
   async generate() {
+    // lustige Button-Animation (Burst)
+    if (this.burstTimer) clearTimeout(this.burstTimer);
+    this.bursting.set(false);
+    requestAnimationFrame(() => {
+      this.bursting.set(true);
+    });
+    this.burstTimer = setTimeout(() => this.bursting.set(false), 720);
+
     this.animGate.set(false);
     this.error.set(null);
     this.topRow.set([]);
@@ -425,6 +438,11 @@ mit Kette: benötigt 3 Pompfen-Spieler + 1 Kette, vorhanden ${sparersWithChain} 
     const amp = 1 + Math.floor(rnd() * 3);
     const bob = 2.2 + rnd() * 1.0;
 
+    // Bunte Hintergrund-Animation pro Karte (zufällige Farbe + Timing)
+    const hue = Math.floor(rnd() * 360); // 0..359
+    const bgDur = 12 + Math.floor(rnd() * 10); // 12–21 s
+    const bgDelayMs = Math.floor(rnd() * 3000); // 0–3000 ms
+
     return {
       '--delay': `${delay}ms`,
       '--dur': `${dur}ms`,
@@ -434,6 +452,9 @@ mit Kette: benötigt 3 Pompfen-Spieler + 1 Kette, vorhanden ${sparersWithChain} 
       '--rot': `${rot}deg`,
       '--amp': `${amp}px`,
       '--bob': `${bob}s`,
+      '--hue': `${hue}`,
+      '--bg-dur': `${bgDur}s`,
+      '--bg-delay': `${bgDelayMs}ms`,
     } as any;
   }
 }

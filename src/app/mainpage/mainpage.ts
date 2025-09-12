@@ -1,12 +1,11 @@
 import { Component, computed, signal } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { LineupService } from '../lineup-service';
-import { LineupComponent } from '../lineup/lineup';
-import { GeneratorComponent } from '../generator/generator';
+import { SiteHeader } from '../site-header/site-header';
 
 @Component({
   selector: 'app-mainpage',
-  imports: [LineupComponent, GeneratorComponent, RouterModule],
+  imports: [RouterModule, SiteHeader],
   templateUrl: './mainpage.html',
   styleUrl: './mainpage.scss',
 })

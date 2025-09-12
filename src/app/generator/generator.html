@@ -1,84 +1,84 @@
 <section class="generator">
-  <header class="head">
-    <h2 class="h2">GENERATOR</h2>
-
-    <div
-      class="seg"
-      [formGroup]="form"
-      role="tablist"
-      aria-label="Ketten-Option"
-    >
-      <label class="seg-btn" [class.active]="form.value.mode === 'withChain'">
-        <input
-          class="visually-hidden"
-          type="radio"
-          value="withChain"
-          formControlName="mode"
-        />
-        <span>Kette save</span>
-      </label>
-      <label class="seg-btn" [class.active]="form.value.mode === 'maybe'">
-        <input
-          class="visually-hidden"
-          type="radio"
-          value="maybe"
-          formControlName="mode"
-        />
-        <span>vielleicht Kette?</span>
-      </label>
-      <label class="seg-btn" [class.active]="form.value.mode === 'noChain'">
-        <input
-          class="visually-hidden"
-          type="radio"
-          value="noChain"
-          formControlName="mode"
-        />
-        <span>ohne Kette?!</span>
-      </label>
-    </div>
-
-    <label class="cb" [formGroup]="form" style="justify-self: end">
-      <input type="checkbox" formControlName="equalize" />
-      <span>gleiche Spielzeit</span>
-    </label>
-
-    <button class="btn big primary" type="button" (click)="generate()">
-      GENERIEREN
-    </button>
-  </header>
-
   @if (error()) {
   <p class="error">{{ error() }}</p>
-  } @if (topRow().length === 4 && quickSlot()) {
+  }
+
+  <!-- Aufstellung oder Skeleton -->
   <div class="formation" [class.anim-on]="animGate()">
     <div class="line" #lineupBlock>
-      @for (s of topRow(); let idx = $index; track trackTop(idx, s)) {
-      <article class="slot-card anim" [ngStyle]="animStyle('top', idx)">
-        <figure class="avatar">
-          <img [src]="s.player.profilePicture" [alt]="s.player.name" />
-        </figure>
-        <div class="name">{{ s.player.name }}</div>
-        <div class="tag">{{ s.kindLabel }}</div>
-      </article>
+      @if (topRow().length === 4) {
+        @for (s of topRow(); let idx = $index; track trackTop(idx, s)) {
+        <article class="slot-card anim" [ngStyle]="animStyle('top', idx)">
+          <figure class="avatar">
+            <img [src]="s.player.profilePicture" [alt]="s.player.name" />
+          </figure>
+          <div class="name">{{ s.player.name }}</div>
+          <div class="tag">{{ s.kindLabel }}</div>
+        </article>
+        }
+      } @else {
+        @for (_ of [0,1,2,3]; let idx = $index; track idx) {
+        <article class="slot-card skeleton">
+          <figure class="avatar skeleton-box"></figure>
+          <div class="name skeleton-line"></div>
+          <div class="tag skeleton-pill"></div>
+        </article>
+        }
       }
     </div>
 
     <div class="quick">
       @if (quickSlot(); as q) { @for (_ of [q]; track trackByQuick()) {
-      <article
-        class="slot-card quick-card anim"
-        [ngStyle]="animStyle('quick', 0)"
-      >
+      <article class="slot-card quick-card anim" [ngStyle]="animStyle('quick', 0)">
         <figure class="avatar">
           <img [src]="q.player.profilePicture" [alt]="q.player.name" />
         </figure>
         <div class="name">{{ q.player.name }}</div>
         <div class="tag">{{ q.kindLabel }}</div>
       </article>
-      } }
+      } } @else {
+      <article class="slot-card quick-card skeleton">
+        <figure class="avatar skeleton-box"></figure>
+        <div class="name skeleton-line short"></div>
+        <div class="tag skeleton-pill"></div>
+      </article>
+      }
     </div>
   </div>
-  }
+
+  <!-- Controls unter der Aufstellung -->
+  <header class="controls">
+    <button class="btn hero primary" type="button" (click)="generate()" [class.burst]="bursting()">
+      GENERIEREN
+    </button>
+
+    <div class="opts" [formGroup]="form" aria-label="Optionen">
+      <div class="seg seg-mini" role="tablist" aria-label="Ketten-Option">
+        <label class="seg-btn" [class.active]="form.value.mode === 'withChain'">
+          <input class="visually-hidden" type="radio" value="withChain" formControlName="mode" />
+          <span>Kette save</span>
+        </label>
+        <label class="seg-btn" [class.active]="form.value.mode === 'maybe'">
+          <input class="visually-hidden" type="radio" value="maybe" formControlName="mode" />
+          <span>vielleicht Kette?</span>
+        </label>
+        <label class="seg-btn" [class.active]="form.value.mode === 'noChain'">
+          <input class="visually-hidden" type="radio" value="noChain" formControlName="mode" />
+          <span>ohne Kette?!</span>
+        </label>
+      </div>
+
+      <!--
+      <label class="cb">
+        <input type="checkbox" formControlName="equalize" />
+        <span>gleiche Spielzeit</span>
+      </label>
+      -->
+    </div>
+    <div class="sub-actions">
+      <a class="btn sm" [routerLink]="['/kader']">Kader bearbeiten</a>
+    </div>
+  </header>
 
   <!-- Spiele / Verläufe -->
   <hr class="big-sep" />

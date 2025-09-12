@@ -11,3 +11,24 @@ body {
     Arial, sans-serif;
   background: #fff;
 }
+
+/* Global: robustes Box-Modell und angenehmere Mobile-Defaults */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+img, video {
+  max-width: 100%;
+  height: auto;
+}
+
+/* iOS Safari: weniger Tap-Highlight und sanfteres Scrolling */
+html {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Utility: responsive Container-Padding auf kleinen Screens */
+.container-pad {
+  padding-left: clamp(8px, 3vw, 16px);
+  padding-right: clamp(8px, 3vw, 16px);
+}

@@ -15,6 +15,7 @@ import {
 } from '@angular/forms';
 import { Lineup, Player } from '../_interfaces/lineupInterface';
 import { LineupService } from '../lineup-service';
+import { RouterModule } from '@angular/router';
 
 /* ---------- Consts ---------- */
 
@@ -32,7 +33,7 @@ const PLACEHOLDER_AVATAR =
 @Component({
   selector: 'app-lineup',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, RouterModule],
   templateUrl: './lineup.html',
   styleUrls: ['./lineup.scss'],
 })
@@ -50,7 +51,6 @@ export class LineupComponent {
   globalChainExtras = signal<string[]>([]);
 
   /* State */
-  expanded = signal(true);
   players = signal<Player[]>([]);
   editingIndex = signal<number | null>(null);
 
@@ -104,7 +104,6 @@ export class LineupComponent {
 
     if (snapshot?.players?.length) this.players.set([...snapshot.players]);
     if (snapshot?.teamName) this.teamNameCtrl.setValue(snapshot.teamName);
-    if(this.teamNameCtrl.value != "") this.expanded.update(()=> false);
 
     // globale Extras aus vorhandenen Spielern ableiten
     if (snapshot?.players?.length) {
@@ -129,9 +128,7 @@ export class LineupComponent {
 
   /* ---------- UI Actions ---------- */
 
-  toggleExpanded() {
-    this.expanded.update((v) => !v);
-  }
+  // expand/collapse entfernt – Kader hat eigene Seite
 
   async onPickImage(ev: Event) {
     const input = ev.target as HTMLInputElement;
@@ -354,7 +351,7 @@ export class LineupComponent {
       profileFile: p.profilePicture || this.defaultAvatar,
     });
 
-    this.expanded.set(true);
+    // expand/collapse nicht mehr nötig; Formular bleibt sichtbar
   }
 
   delete(i: number) {
