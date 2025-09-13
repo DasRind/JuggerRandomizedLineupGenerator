@@ -424,24 +424,29 @@ $blue-border: #7d92bf;
   }
 }
 
-/* Farbige, langsame Hintergrund-Animation für echte Karten */
-.slot-card:not(.skeleton)::before {
-  content: "";
-  position: absolute;
-  inset: -10%;
-  z-index: 0;
-  pointer-events: none;
-  background: linear-gradient(
-    90deg,
-    hsla(var(--hue, 180), 75%, 85%, 0.35) 0%,
-    hsla(calc(var(--hue, 180) + 30), 75%, 90%, 0.35) 50%,
-    hsla(var(--hue, 180), 75%, 85%, 0.35) 100%
-  );
-  background-size: 200% 100%;
-  animation: cardBgSlide var(--bg-dur, 14s) ease-in-out infinite;
-  animation-delay: var(--bg-delay, 0s);
-  filter: hue-rotate(0deg);
-}
+// /* Schlanke Farb-Linienanimation über den Karten (statt Vollflächen-Hintergrund) */
+// .slot-card:not(.skeleton)::before {
+//   content: "";
+//   position: absolute;
+//   /* schmaler Streifen, der diagonal über die Karte läuft */
+//   top: -50%;
+//   left: -30%;
+//   width: 24%;
+//   height: 200%;
+//   z-index: 0;
+//   pointer-events: none;
+//   background: linear-gradient(
+//     90deg,
+//     hsla(var(--hue, 180), 85%, 60%, 0) 0%,
+//     hsla(var(--hue, 180), 85%, 60%, 0.42) 50%,
+//     hsla(var(--hue, 180), 85%, 60%, 0) 100%
+//   );
+//   /* wie beim Hero-Button: schräg und wandert quer über die Karte */
+//   transform: skewX(-20deg) translateX(-120%);
+//   filter: saturate(1.05);
+//   animation: cardShine var(--bg-dur, 14s) linear infinite;
+//   animation-delay: var(--bg-delay, 0s);
+// }
 
 /* Inhalte oberhalb der animierten Fläche halten */
 .slot-card > * {
@@ -449,18 +454,12 @@ $blue-border: #7d92bf;
   z-index: 1;
 }
 
-@keyframes cardBgSlide {
+@keyframes cardShine {
   0% {
-    background-position: 200% 0;
-    filter: hue-rotate(0deg);
-  }
-  50% {
-    background-position: 0 0;
-    filter: hue-rotate(90deg);
+    transform: skewX(-20deg) translateX(-120%);
   }
   100% {
-    background-position: -200% 0;
-    filter: hue-rotate(180deg);
+    transform: skewX(-20deg) translateX(260%);
   }
 }
 
