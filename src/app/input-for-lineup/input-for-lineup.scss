@@ -94,6 +94,9 @@ $blue-border: #7d92bf;
     color: $ink;
     padding: 10px 16px;
     border-radius: 12px;
+    /* Normalize font sizing across <label> and <button> */
+    font-size: 1rem;
+    line-height: 1.1;
     font-weight: 700;
     display: inline-flex;
     align-items: center;
