@@ -49,15 +49,35 @@ $blue-border: #7d92bf;
   left: -30%;
   width: 60%;
   height: 200%;
-  background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.45) 50%, rgba(255,255,255,0) 100%);
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.45) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
   transform: skewX(-20deg) translateX(-120%);
   pointer-events: none;
 }
-.btn.hero:hover { transform: translateY(-2px); box-shadow: 0 14px 28px rgba(120,183,132,.34); filter: saturate(1.05); }
-.btn.hero:hover::after { animation: shineHero 1s ease forwards; }
-.btn.hero:active { transform: translateY(0); box-shadow: 0 8px 16px rgba(120,183,132,.28); filter: saturate(.98); }
+.btn.hero:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 28px rgba(120, 183, 132, 0.34);
+  filter: saturate(1.05);
+  cursor: pointer;
+}
+.btn.hero:hover::after {
+  animation: shineHero 1s ease forwards;
+}
+.btn.hero:active {
+  transform: translateY(0);
+  box-shadow: 0 8px 16px rgba(120, 183, 132, 0.28);
+  filter: saturate(0.98);
+}
 
-@keyframes shineHero { to { transform: skewX(-20deg) translateX(260%); } }
+@keyframes shineHero {
+  to {
+    transform: skewX(-20deg) translateX(260%);
+  }
+}
 
 .cards {
   display: grid;
@@ -79,7 +99,10 @@ $blue-border: #7d92bf;
   overflow: hidden;
   transition: transform 120ms ease, box-shadow 160ms ease;
 
-  &:hover { transform: translateY(-2px); box-shadow: 0 10px 26px rgba(31,42,55,.12); }
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 26px rgba(31, 42, 55, 0.12);
+  }
 
   .muted {
     color: $ink-soft;
@@ -116,8 +139,15 @@ $blue-border: #7d92bf;
   background: linear-gradient(180deg, #eefcf2 0%, #ffffff 100%);
 }
 
-.h3 { font-size: clamp(16px, 2.4vw, 22px); display: flex; align-items: center; gap: 8px; }
-.h3 .ico { font-size: 1.3em; }
+.h3 {
+  font-size: clamp(16px, 2.4vw, 22px);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.h3 .ico {
+  font-size: 1.3em;
+}
 
 /* Datei-Input unsichtbar, bedienbar über Label-Button */
 .visually-hidden {
@@ -170,7 +200,7 @@ $blue-border: #7d92bf;
 
   .name {
     font-weight: 800;
-    letter-spacing: .01em;
+    letter-spacing: 0.01em;
   }
   .meta {
     font-size: 12px;

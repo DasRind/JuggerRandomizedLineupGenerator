@@ -224,7 +224,7 @@ $blue-border: #7d92bf;
   user-select: none;
   color: $ink-soft;
   transition: background 0.15s ease, border-color 0.15s ease,
-    box-shadow 0.15s ease;
+    box-shadow 0.15s ease, transform 0.12s ease, filter 0.15s ease;
   flex: 0 0 auto;
   min-width: 0;
   white-space: nowrap;
@@ -236,6 +236,19 @@ $blue-border: #7d92bf;
     box-shadow: 0 0 0 2px rgba(125, 146, 191, 0.15) inset;
     font-weight: 700;
     color: $ink;
+  }
+
+  &:hover {
+    background: rgba($blue, 0.45);
+    border-color: $blue-border;
+    color: $ink;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(31, 42, 55, 0.12);
+  }
+  &:active {
+    transform: translateY(0);
+    filter: saturate(0.98);
+    box-shadow: 0 1px 4px rgba(31, 42, 55, 0.1);
   }
 }
 
@@ -424,7 +437,7 @@ $blue-border: #7d92bf;
   }
 }
 
-// /* Schlanke Farb-Linienanimation über den Karten (statt Vollflächen-Hintergrund) */
+/* Schlanke Farb-Linienanimation über den Karten (statt Vollflächen-Hintergrund) */
 // .slot-card:not(.skeleton)::before {
 //   content: "";
 //   position: absolute;
@@ -438,12 +451,12 @@ $blue-border: #7d92bf;
 //   background: linear-gradient(
 //     90deg,
 //     hsla(var(--hue, 180), 85%, 60%, 0) 0%,
-//     hsla(var(--hue, 180), 85%, 60%, 0.42) 50%,
+//     hsla(var(--hue, 180), 85%, 60%, 0.35) 50%,
 //     hsla(var(--hue, 180), 85%, 60%, 0) 100%
 //   );
 //   /* wie beim Hero-Button: schräg und wandert quer über die Karte */
 //   transform: skewX(-20deg) translateX(-120%);
-//   filter: saturate(1.05);
+//   filter: saturate(1.03);
 //   animation: cardShine var(--bg-dur, 14s) linear infinite;
 //   animation-delay: var(--bg-delay, 0s);
 // }
@@ -656,7 +669,7 @@ $blue-border: #7d92bf;
     background: #e6efff;
     border: 1px solid #96a9d4;
     font-size: 12px;
-    flex-wrap: wrap;           /* allow wrapping inside pill */
+    flex-wrap: wrap; /* allow wrapping inside pill */
     max-width: 100%;
     min-width: 0;
 
@@ -741,8 +754,15 @@ $blue-border: #7d92bf;
 
 /* --- Extra small screens (≤360px) --- */
 @media (max-width: 360px) {
-  .formation .line { gap: 6px; justify-items: center; }
-  .slot-card { padding: 6px; gap: 4px; border-radius: 12px; }
+  .formation .line {
+    gap: 6px;
+    justify-items: center;
+  }
+  .slot-card {
+    padding: 6px;
+    gap: 4px;
+    border-radius: 12px;
+  }
   .slot-card .avatar {
     width: clamp(40px, 16vw, 70px);
     height: clamp(40px, 16vw, 70px);
@@ -750,33 +770,81 @@ $blue-border: #7d92bf;
     border-radius: 10px;
     justify-self: center; /* ensure avatar centers in narrow cells */
   }
-  .slot-card .name { font-size: 12px; }
-  .slot-card .tag { font-size: 10px; padding: 2px 6px; }
+  .slot-card .name {
+    font-size: 12px;
+  }
+  .slot-card .tag {
+    font-size: 10px;
+    padding: 2px 6px;
+  }
 
   /* History + Kopfbereich Kompakt */
-  .game-head { gap: 8px; align-items: flex-start; }
-  .game-head .title { flex: 1 1 100%; }
-  .game-head .title .input { width: 100%; min-width: 0; }
-  .game-head .actions { width: 100%; flex-wrap: wrap; gap: 6px; justify-content: flex-start; }
-  .game-head .actions .btn { padding: 6px 8px; font-size: 12px; border-radius: 8px; }
+  .game-head {
+    gap: 8px;
+    align-items: flex-start;
+  }
+  .game-head .title {
+    flex: 1 1 100%;
+  }
+  .game-head .title .input {
+    width: 100%;
+    min-width: 0;
+  }
+  .game-head .actions {
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: flex-start;
+  }
+  .game-head .actions .btn {
+    padding: 6px 8px;
+    font-size: 12px;
+    border-radius: 8px;
+  }
 
-  .history-list { gap: 6px; }
-  .hist-item { padding: 8px; }
-  .hist-item .meta { flex-wrap: wrap; gap: 6px; }
-  .hist-item .pill { font-size: 11px; padding: 3px 6px; }
+  .history-list {
+    gap: 6px;
+  }
+  .hist-item {
+    padding: 8px;
+  }
+  .hist-item .meta {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .hist-item .pill {
+    font-size: 11px;
+    padding: 3px 6px;
+  }
 }
 
 /* --- Ultra small screens (≤300px) --- */
 @media (max-width: 300px) {
-  .formation .line { gap: 4px; }
-  .slot-card { padding: 4px; gap: 3px; }
+  .formation .line {
+    gap: 4px;
+  }
+  .slot-card {
+    padding: 4px;
+    gap: 3px;
+  }
   .slot-card .avatar {
     width: clamp(40px, 16vw, 92px);
     height: clamp(40px, 16vw, 92px);
   }
-  .slot-card .name { font-size: 11px; }
-  .slot-card .tag { font-size: 9px; padding: 2px 5px; }
+  .slot-card .name {
+    font-size: 11px;
+  }
+  .slot-card .tag {
+    font-size: 9px;
+    padding: 2px 5px;
+  }
 
-  .game-head .actions .btn { padding: 5px 6px; font-size: 11px; }
-  .hist-item .pill { font-size: 10px; padding: 2px 5px; }
+  .game-head .actions .btn {
+    padding: 5px 6px;
+    font-size: 11px;
+  }
+  .hist-item .pill {
+    font-size: 10px;
+    padding: 2px 5px;
+  }
 }

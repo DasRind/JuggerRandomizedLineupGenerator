@@ -12,6 +12,17 @@ body {
   background: #fff;
 }
 
+/* Brand tokens (global) */
+:root {
+  --ink: #1f2a37;
+  --blue-border: #7d92bf;
+  --blue: #cfe0ff;
+  --brand-green: #78b784;
+  --brand-green-soft: #b7e9c3;
+  --btn-shadow: 0 2px 8px rgba(31, 42, 55, 0.08);
+  --btn-shadow-hover: 0 6px 16px rgba(31, 42, 55, 0.16);
+}
+
 /* Global: robustes Box-Modell und angenehmere Mobile-Defaults */
 *, *::before, *::after {
   box-sizing: border-box;
@@ -31,4 +42,36 @@ html {
 .container-pad {
   padding-left: clamp(8px, 3vw, 16px);
   padding-right: clamp(8px, 3vw, 16px);
+}
+
+/* Global button hover/active affordances (applies to all .btn) */
+.btn {
+  transition: transform 120ms ease, box-shadow 160ms ease, filter 160ms ease,
+    background-color 160ms ease, border-color 160ms ease;
+  box-shadow: var(--btn-shadow);
+}
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--btn-shadow-hover);
+  filter: saturate(1.03);
+}
+.btn:active {
+  transform: translateY(0);
+  box-shadow: var(--btn-shadow);
+  filter: saturate(0.98);
+}
+.btn.primary:hover {
+  background-color: var(--brand-green-soft);
+  border-color: var(--brand-green);
+}
+.btn.ghost:hover {
+  background-color: rgba(207, 224, 255, 0.35);
+  border-color: var(--blue-border);
+  color: var(--ink);
+}
+
+/* Focus visibility */
+.btn:focus-visible {
+  outline: 2px solid var(--blue-border);
+  outline-offset: 2px;
 }
