@@ -7,16 +7,25 @@ $brand-green: #78b784; /* nah an Generator-Primary */
 $brand-green-soft: #b7e9c3;
 $brand-blue: #314d6a;
 $brand-blue-soft: #cfe0ff;
+$content-width: min(1100px, 94vw);
 
 .site-header {
   background: linear-gradient(90deg, $ink 0%, #23424e 55%, $brand-blue 100%);
   color: #fff;
   padding: 10px clamp(12px, 3vw, 20px);
+  box-shadow: 0 2px 0 rgba(255,255,255,0.06) inset, 0 8px 18px rgba(0,0,0,0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.site-header__inner {
+  width: 100%;
+  max-width: $content-width;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  box-shadow: 0 2px 0 rgba(255,255,255,0.06) inset, 0 8px 18px rgba(0,0,0,0.18);
 
   /* Very small screens: keep one row; let .nav wrap internally */
   @media (max-width: 420px) {
@@ -77,7 +86,7 @@ $brand-blue-soft: #cfe0ff;
 }
 /* Mid-small screens: 421px–650px: keep header in one row, let nav wrap */
 @media (max-width: 650px) and (min-width: 421px) {
-  .site-header { align-items: flex-start; }
+  .site-header__inner { align-items: flex-start; }
   .nav { flex: 1 1 auto; min-width: 0; flex-wrap: wrap; gap: 10px; justify-content: flex-end; }
   .nav .link { padding: 6px 9px; }
   .nav .link .ico { width: 15px; height: 15px; }
