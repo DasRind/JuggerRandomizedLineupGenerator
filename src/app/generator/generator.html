@@ -1,35 +1,30 @@
 <section class="generator">
-  @if (error()) {
-  <p class="error">{{ error() }}</p>
-  }
-
-  <!-- Aufstellung oder Skeleton -->
-  <div class="formation" [class.anim-on]="animGate()">
-    <div class="line" #lineupBlock>
-      @if (topRow().length === 4) {
-        @for (s of topRow(); let idx = $index; track trackTop(idx, s)) {
-        <article class="slot-card anim" [ngStyle]="animStyle('top', idx)">
-          <figure class="avatar">
-            <img [src]="s.player.profilePicture" [alt]="s.player.name" />
-          </figure>
-          <div class="name">{{ s.player.name }}</div>
-          <div class="tag">{{ s.kindLabel }}</div>
-        </article>
-        }
-      } @else {
-        @for (_ of [0,1,2,3]; let idx = $index; track idx) {
-        <article class="slot-card skeleton">
-          <figure class="avatar skeleton-box"></figure>
-          <div class="name skeleton-line"></div>
-          <div class="tag skeleton-pill"></div>
-        </article>
-        }
-      }
+  <ng-template #formationTpl>
+    <div class="line">
+      @if (topRow().length === 4) { @for (s of topRow(); let idx = $index; track
+      trackTop(idx, s)) {
+      <article class="slot-card anim" [ngStyle]="animStyle('top', idx)">
+        <figure class="avatar">
+          <img [src]="s.player.profilePicture" [alt]="s.player.name" />
+        </figure>
+        <div class="name">{{ s.player.name }}</div>
+        <div class="tag">{{ s.kindLabel }}</div>
+      </article>
+      } } @else { @for (_ of [0,1,2,3]; let idx = $index; track idx) {
+      <article class="slot-card skeleton">
+        <figure class="avatar skeleton-box"></figure>
+        <div class="name skeleton-line"></div>
+        <div class="tag skeleton-pill"></div>
+      </article>
+      } }
     </div>
 
     <div class="quick">
       @if (quickSlot(); as q) { @for (_ of [q]; track trackByQuick()) {
-      <article class="slot-card quick-card anim" [ngStyle]="animStyle('quick', 0)">
+      <article
+        class="slot-card quick-card anim"
+        [ngStyle]="animStyle('quick', 0)"
+      >
         <figure class="avatar">
           <img [src]="q.player.profilePicture" [alt]="q.player.name" />
         </figure>
@@ -44,26 +39,114 @@
       </article>
       }
     </div>
+  </ng-template>
+  <div class="team-status" [class.team-status--loading]="teamLoading()">
+    @if (teamLoading()) {
+    <div class="team-status__row">
+      <div class="team-status__logo skeleton-box"></div>
+      <div class="team-status__text">
+        <div class="team-status__line skeleton-line"></div>
+        <div class="team-status__meta skeleton-pill"></div>
+      </div>
+    </div>
+    } @else {
+    <div class="team-status__row">
+      <figure class="team-status__logo">
+        <img [src]="teamLogo()" [alt]="teamLabel() || 'Teamlogo'" />
+      </figure>
+      <div class="team-status__text">
+        <div class="team-status__line">
+          <span class="team-status__label">Team</span>
+          <span class="team-status__value">{{
+            teamLabel() || "Eigenes Team"
+          }}</span>
+        </div>
+        <div class="team-status__meta">
+          @if (currentTeamId()) {
+          <span class="team-status__tag">Preset</span>
+          } @else {
+          <span class="team-status__tag neutral">Individuell</span>
+          }
+          <span class="team-status__count">{{ playerCount() }} Spieler</span>
+        </div>
+      </div>
+      <a
+        class="btn primary team-status__edit"
+        [routerLink]="['/kader']"
+        [queryParams]="teamQuery()"
+      >
+        Kader bearbeiten
+      </a>
+      <button
+        class="btn tertiary team-status__action"
+        type="button"
+        (click)="goToInput()"
+        [disabled]="teamLoading()"
+      >
+        Team wechseln
+      </button>
+    </div>
+    }
+  </div>
+
+  @if (error()) {
+  <p class="error">{{ error() }}</p>
+  } @if (teamError()) {
+  <p class="team-status__error">{{ teamError() }}</p>
+  }
+
+  <!-- Aufstellung oder Skeleton -->
+  <div class="formation" [class.anim-on]="animGate()">
+    <ng-container *ngTemplateOutlet="formationTpl"></ng-container>
   </div>
 
   <!-- Controls unter der Aufstellung -->
   <header class="controls">
-    <button class="btn hero primary" type="button" (click)="generate()" [class.burst]="bursting()">
+    <button
+      class="btn hero primary"
+      type="button"
+      (click)="generate()"
+      [class.burst]="bursting()"
+      [disabled]="teamLoading()"
+    >
       GENERIEREN
+    </button>
+    <button
+      class="btn tertiary ingame-toggle"
+      type="button"
+      (click)="toggleIngame()"
+      [disabled]="teamLoading()"
+    >
+      INGAME: {{ ingameMode() ? 'AN' : 'AUS' }}
     </button>
 
     <div class="opts" [formGroup]="form" aria-label="Optionen">
       <div class="seg seg-mini" role="tablist" aria-label="Ketten-Option">
         <label class="seg-btn" [class.active]="form.value.mode === 'withChain'">
-          <input class="visually-hidden" type="radio" value="withChain" formControlName="mode" />
+          <input
+            class="visually-hidden"
+            type="radio"
+            value="withChain"
+            formControlName="mode"
+          />
           <span>Kette save</span>
         </label>
         <label class="seg-btn" [class.active]="form.value.mode === 'maybe'">
-          <input class="visually-hidden" type="radio" value="maybe" formControlName="mode" />
+          <input
+            class="visually-hidden"
+            type="radio"
+            value="maybe"
+            formControlName="mode"
+          />
           <span>vielleicht Kette?</span>
         </label>
         <label class="seg-btn" [class.active]="form.value.mode === 'noChain'">
-          <input class="visually-hidden" type="radio" value="noChain" formControlName="mode" />
+          <input
+            class="visually-hidden"
+            type="radio"
+            value="noChain"
+            formControlName="mode"
+          />
           <span>ohne Kette?!</span>
         </label>
       </div>
@@ -74,9 +157,6 @@
         <span>gleiche Spielzeit</span>
       </label>
       -->
-    </div>
-    <div class="sub-actions">
-      <a class="btn sm" [routerLink]="['/kader']">Kader bearbeiten</a>
     </div>
   </header>
 
@@ -151,4 +231,75 @@
     </article>
     }
   </section>
+
+  @if (ingameMode()) {
+  <div class="ingame-overlay" [class.portrait]="ingamePortraitMode()">
+    <div class="ingame-overlay__formation">
+      <div class="ingame-formation" [class.anim-on]="animGate()">
+        <div class="ingame-board">
+          <div class="ingame-top">
+            @if (topRow().length === 4) { @for (s of topRow(); let idx = $index; track
+            trackTop(idx, s)) {
+            <article class="slot-card anim" [ngStyle]="animStyle('top', idx)">
+              <figure class="avatar">
+                <img [src]="s.player.profilePicture" [alt]="s.player.name" />
+              </figure>
+              <div class="name">{{ s.player.name }}</div>
+              <div class="tag">{{ s.kindLabel }}</div>
+            </article>
+            } } @else { @for (_ of [0,1,2,3]; let idx = $index; track idx) {
+            <article class="slot-card skeleton">
+              <figure class="avatar skeleton-box"></figure>
+              <div class="name skeleton-line"></div>
+              <div class="tag skeleton-pill"></div>
+            </article>
+            } }
+          </div>
+
+          <div class="ingame-bottom">
+            <button
+              class="btn hero primary ingame-btn"
+              type="button"
+              (click)="generate()"
+              [disabled]="teamLoading()"
+              [class.burst]="bursting()"
+            >
+              GENERIEREN
+            </button>
+
+            <div class="ingame-quick">
+              @if (quickSlot(); as q) { @for (_ of [q]; track trackByQuick()) {
+              <article
+                class="slot-card quick-card anim"
+                [ngStyle]="animStyle('quick', 0)"
+              >
+                <figure class="avatar">
+                  <img [src]="q.player.profilePicture" [alt]="q.player.name" />
+                </figure>
+                <div class="name">{{ q.player.name }}</div>
+                <div class="tag">{{ q.kindLabel }}</div>
+              </article>
+              } } @else {
+              <article class="slot-card quick-card skeleton">
+                <figure class="avatar skeleton-box"></figure>
+                <div class="name skeleton-line short"></div>
+                <div class="tag skeleton-pill"></div>
+              </article>
+              }
+            </div>
+
+            <button
+              class="btn secondary ingame-btn"
+              type="button"
+              (click)="toggleIngame()"
+              [disabled]="teamLoading()"
+            >
+              INGAME: {{ ingameMode() ? 'AN' : 'AUS' }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  }
 </section>

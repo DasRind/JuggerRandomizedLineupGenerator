@@ -1,99 +1,30 @@
-import { Component, inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, inject, signal, computed } from '@angular/core';
+import { Router, RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { LineupService } from '../lineup-service';
+import { TeamLoaderService } from '../team-loader.service';
+import { KnownTeamConfig, TEAM_PLACEHOLDER } from '../_config/known-teams';
 import { Lineup } from '../_interfaces/lineupInterface';
-
-// kleines neutrales Platzhalter-Avatar (gleichen Stil wie in Lineup)
-const PLACEHOLDER_AVATAR =
-  'data:image/svg+xml;utf8,' +
-  encodeURIComponent(`
-  <svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160">
-    <rect width="100%" height="100%" rx="12" fill="#ffffff" stroke="#1f2a37" stroke-width="4"/>
-    <circle cx="80" cy="68" r="26" fill="none" stroke="#1f2a37" stroke-width="4"/>
-    <path d="M36 130c10-22 34-26 44-26s34 4 44 26" fill="none" stroke="#1f2a37" stroke-width="4" stroke-linecap="round"/>
-  </svg>`);
-
-/**
- * 👉 Hier hinterlegst du beliebig viele bekannte Teams.
- * Du kannst diese Liste jederzeit erweitern/anpassen.
- */
-const KNOWN_TEAMS: Array<{ label: string; lineup: Lineup }> = [];
 
 @Component({
   selector: 'app-input-for-lineup',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, RouterModule],
   templateUrl: './input-for-lineup.html',
   styleUrls: ['./input-for-lineup.scss'],
 })
 export class InputForLineupComponent {
   private router = inject(Router);
   private lineupService = inject(LineupService);
+  private teamLoader = inject(TeamLoaderService);
+  loadingTeamId = this.teamLoader.loadingTeamId;
+  private teamLogos = signal<Record<string, string>>({});
+  visibleTeams = computed(() =>
+    this.teamLoader.knownTeams.filter((team) => !team.hidden)
+  );
 
   constructor() {
-    this.knownTeams.length = 0; // reset
-    this.addDefaultLineup();
-    // automatisch laden bei App-Start
-    (async () => {
-      try {
-        const resp = await fetch('knownTeams/Jungle_Diff_Kader.randomizer');
-        // oder 'Jungle_Diff_Kader.randomizer' wenn im public/ liegt
-        const json = await resp.json();
-        KNOWN_TEAMS.push({
-          label: 'Jungle Diff',
-          lineup: json as Lineup,
-        });
-      } catch (e) {
-        console.error('Kader-Datei konnte nicht geladen werden:', e);
-      }
-    })();
-  }
-
-  addDefaultLineup() {
-    this.knownTeams.push({
-      label: 'Demo – 5 Spieler (ohne Kette)',
-      lineup: {
-        teamName: 'Demo Five',
-        players: [
-          {
-            name: 'Quickie',
-            profilePicture: PLACEHOLDER_AVATAR,
-            quick: ['Laufen'],
-            spars: [],
-            chains: [],
-          },
-          {
-            name: 'P1',
-            profilePicture: PLACEHOLDER_AVATAR,
-            quick: [],
-            spars: ['LP'],
-            chains: [],
-          },
-          {
-            name: 'P2',
-            profilePicture: PLACEHOLDER_AVATAR,
-            quick: [],
-            spars: ['Schild'],
-            chains: [],
-          },
-          {
-            name: 'P3',
-            profilePicture: PLACEHOLDER_AVATAR,
-            quick: [],
-            spars: ['Stab'],
-            chains: [],
-          },
-          {
-            name: 'P4',
-            profilePicture: PLACEHOLDER_AVATAR,
-            quick: [],
-            spars: ['Q-Tip'],
-            chains: [],
-          },
-        ],
-      },
-    });
+    void this.prefetchTeamLogos();
   }
 
   /** Datei geladen -> parse + weiterreichen */
@@ -106,8 +37,9 @@ export class InputForLineupComponent {
       const text = await file.text();
       const json = JSON.parse(text) as Lineup;
       // optional: Schema-Check wie in LineupComponent
+      this.teamLoader.setSelectedTeam(null);
       this.lineupService.setLineup(json);
-      this.router.navigateByUrl('/mainpage');
+      await this.router.navigate(['/generator']);
     } catch (e) {
       alert('Datei konnte nicht gelesen/geparst werden.');
       console.error(e);
@@ -116,25 +48,83 @@ export class InputForLineupComponent {
     }
   }
 
-  /** 👉 Shortcut: bekanntes Team laden & zur Mainpage */
-  loadKnownTeam(item: { label: string; lineup: Lineup }) {
-    this.lineupService.setLineup(item.lineup);
-    this.router.navigateByUrl('/mainpage');
+  /** 👉 Shortcut: bekanntes Team laden & Generator öffnen */
+  async loadKnownTeam(item: KnownTeamConfig) {
+    try {
+      this.teamLoader.setSelectedTeam(item.id);
+      const lineup = await this.teamLoader.loadTeam(item.id);
+      this.lineupService.setLineup(lineup);
+      await this.router.navigate(['/generator'], {
+        queryParams: { team: item.id },
+      });
+    } catch (error) {
+      console.error('Team konnte nicht geladen werden:', error);
+      alert('Team konnte nicht geladen werden. Bitte versuch es erneut.');
+    }
   }
 
-  get knownTeams() {
-    return KNOWN_TEAMS;
+  teamPreview(team: KnownTeamConfig): string {
+    return (
+      this.teamLogos()[team.id] ??
+      (team.source === 'inline'
+        ? team.lineup.teamLogo ?? team.preview ?? TEAM_PLACEHOLDER
+        : team.preview ?? TEAM_PLACEHOLDER)
+    );
+  }
+
+  selectedTeamQuery() {
+    const id = this.teamLoader.selectedTeamId();
+    return id ? { team: id } : {};
   }
 
   loadDemo() {
-    const first = this.knownTeams[0];
-    if (first) this.loadKnownTeam(first);
-    else this.goCreateNew();
+    void this.loadDemoTeam();
   }
 
   goCreateNew() {
     // leere Auswahl -> nur Mainpage öffnen
-    this.lineupService.setLineup({ teamName: undefined, players: [] });
+    this.lineupService.setLineup({
+      teamName: undefined,
+      teamLogo: undefined,
+      players: [],
+    });
     this.router.navigateByUrl('/kader');
+    this.teamLoader.setSelectedTeam(null);
+  }
+
+  scrollToPresets() {
+    const el = document.getElementById('presetSection');
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  private async prefetchTeamLogos() {
+    const entries = await Promise.all(
+      this.teamLoader.knownTeams.map(async (team) => {
+        try {
+          const logo = await this.teamLoader.getPreview(team.id);
+          return [team.id, logo] as const;
+        } catch (error) {
+          console.error('Teamlogo konnte nicht geladen werden:', error);
+          return [team.id, team.preview ?? TEAM_PLACEHOLDER] as const;
+        }
+      })
+    );
+
+    const map: Record<string, string> = {};
+    for (const [id, logo] of entries) map[id] = logo;
+    this.teamLogos.set(map);
+  }
+
+  private async loadDemoTeam() {
+    try {
+      const lineup = await this.teamLoader.loadTeam('demo');
+      this.lineupService.setLineup(lineup);
+      await this.router.navigate(['/generator'], {
+        queryParams: { team: 'demo' },
+      });
+    } catch (error) {
+      console.error('Demo-Team konnte nicht geladen werden:', error);
+      alert('Demo-Team konnte nicht geladen werden.');
+    }
   }
 }

@@ -1,14 +1,12 @@
 import { Routes } from '@angular/router';
-import { Landingpage } from './landingpage/landingpage';
 import { Mainpage } from './mainpage/mainpage';
 import { LineupComponent } from './lineup/lineup';
 import { GeneratorComponent } from './generator/generator';
 import { InputForLineupComponent } from './input-for-lineup/input-for-lineup';
 
 export const routes: Routes = [
-  { path: '', redirectTo: '/landingpage', pathMatch: 'full' },
-  { path: 'landingpage', component: Landingpage },
-  // Shell-Layout: alle Seiten außer Landingpage im Mainpage-Frame
+  { path: '', redirectTo: '/input', pathMatch: 'full' },
+  // Shell-Layout für alle Seiten
   {
     path: '',
     component: Mainpage,
@@ -19,4 +17,5 @@ export const routes: Routes = [
       { path: 'mainpage', redirectTo: 'generator', pathMatch: 'full' },
     ],
   },
+  { path: '**', redirectTo: '/input' },
 ];

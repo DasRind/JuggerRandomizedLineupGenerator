@@ -1,7 +1,16 @@
 <header class="topbar">
-    <div class="left">
-      <h2 class="h2">KADER</h2>
+  <div class="left">
+    <label class="team-logo" title="Teamlogo wählen">
+      <input
+        type="file"
+        accept="image/*"
+        class="visually-hidden"
+        (change)="onPickTeamLogo($event)"
+      />
+      <img [src]="teamLogoCtrl.value || defaultTeamLogo" alt="Teamlogo" />
+    </label>
 
+    <div class="team-name-group">
       <input
         class="team-input"
         type="text"
@@ -9,24 +18,30 @@
         [formControl]="teamNameCtrl"
       />
     </div>
+  </div>
 
-    <div class="actions">
-      <a class="btn sm primary to-generator" [routerLink]="['/generator']">Zum Generator!</a>
+  <div class="actions">
+    <a
+      class="btn sm primary to-generator"
+      [routerLink]="['/generator']"
+      [queryParams]="teamQuery()"
+      >Zum Generator</a
+    >
 
-      <button class="btn sm" (click)="save()">Speichern</button>
+    <button class="btn sm" (click)="save()">Speichern</button>
 
-      <!-- versteckter File-Input zum Laden -->
-      <input
-        #loadInput
-        type="file"
-        class="visually-hidden"
-        accept=".randomizer,application/json,.json"
-        (change)="onLoadPicked($event)"
-      />
-      <button class="btn sm ghost" (click)="load()">Laden</button>
-    </div>
-  </header>
-  <section class="content">
+    <!-- versteckter File-Input zum Laden -->
+    <input
+      #loadInput
+      type="file"
+      class="visually-hidden"
+      accept=".randomizer,application/json,.json"
+      (change)="onLoadPicked($event)"
+    />
+    <button class="btn sm ghost" (click)="load()">Laden</button>
+  </div>
+</header>
+<section class="content">
   <div class="grid">
     <!-- Linke Seite: Liste -->
     <section class="list">
@@ -225,4 +240,4 @@
       </form>
     </section>
   </div>
-  </section>
+</section>

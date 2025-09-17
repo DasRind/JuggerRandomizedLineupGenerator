@@ -17,6 +17,12 @@ $blue-border: #7d92bf;
 
   @media (max-width: 980px) {
     grid-template-columns: 1fr;
+    .list {
+      order: 1;
+    }
+    .form {
+      order: 2;
+    }
   }
 }
 
@@ -379,12 +385,71 @@ $blue-border: #7d92bf;
   .left {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    flex-wrap: wrap;
+    gap: 14px;
+    flex-wrap: nowrap;
+    min-width: 0;
   }
   .actions {
     display: inline-flex;
     gap: 10px;
+  }
+}
+
+.team-logo {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 66px;
+  height: 66px;
+  border-radius: 16px;
+  border: 1px solid #cbd5e1;
+  overflow: hidden;
+  cursor: pointer;
+  background: #fff;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  &:hover::after {
+    opacity: 1;
+  }
+
+  &::after {
+    content: 'Logo ändern';
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    font-size: 10px;
+    font-weight: 700;
+    background: rgba(31, 42, 55, 0.6);
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    opacity: 0;
+    transition: opacity 140ms ease;
+  }
+}
+
+.team-name-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: min(260px, 42vw);
+  flex: 1 1 auto;
+}
+
+@media (max-width: 480px) {
+  .team-name-group {
+    min-width: calc(100% - 78px);
+  }
+
+  .team-logo {
+    width: 56px;
+    height: 56px;
   }
 }
 
@@ -403,7 +468,7 @@ $blue-border: #7d92bf;
 @media (max-width: 420px) {
   .topbar .actions { flex-wrap: wrap; justify-content: flex-start; gap: 8px; }
   .topbar .actions .btn { padding: 6px 10px; }
-  .team-input { width: min(220px, 70vw); }
+  .team-input { width: 100%; }
 }
 .content {
   overflow: hidden;
@@ -433,7 +498,7 @@ $blue-border: #7d92bf;
 
 /* Teamname-Feld */
 .team-input {
-  margin-left: 12px;
+  margin-left: 0;
   padding: 6px 10px;
   font-size: clamp(14px, 3.5vw, 16px);
   border: 1px solid #cbd5e1;
@@ -441,7 +506,7 @@ $blue-border: #7d92bf;
   outline: none;
   width: auto;
   flex: 1 1 auto;
-  max-width: min(220px, 45vw);
+  max-width: none;
 
   &:focus {
     border-color: $blue-border;

@@ -33,6 +33,277 @@ $blue-border: #7d92bf;
   }
 }
 
+.team-status {
+  display: grid;
+  gap: 8px;
+  margin: 18px 0;
+  padding: 12px 16px;
+  border: 1px solid $line;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: 0 2px 12px rgba(31, 42, 55, 0.05);
+}
+
+.team-status__row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.team-status__logo {
+  margin: 0;
+  width: 68px;
+  height: 68px;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid $line;
+  background: #f8fbff;
+  flex-shrink: 0;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+}
+
+.team-status__text {
+  display: grid;
+  gap: 6px;
+}
+
+.team-status__line {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.team-status__label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: $ink-soft;
+  font-weight: 700;
+}
+
+.team-status__value {
+  font-size: clamp(16px, 2.4vw, 22px);
+  font-weight: 800;
+  color: $ink;
+}
+
+.team-status__meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 12px;
+  color: $ink-soft;
+}
+
+.team-status__edit {
+  margin-left: auto;
+  min-width: 158px;
+  padding: 12px 20px;
+  font-size: 14px;
+  justify-content: center;
+}
+
+.team-status__action {
+  margin-left: 12px;
+  align-self: center;
+  min-width: 148px;
+  padding: 10px 18px;
+  font-size: 13px;
+  justify-content: center;
+}
+
+@media (max-width: 720px) {
+  .team-status__row {
+    align-items: stretch;
+    gap: 12px;
+  }
+  .team-status__edit,
+  .team-status__action {
+    flex: 1 1 100%;
+    margin-left: 0;
+    min-width: 0;
+    text-align: center;
+  }
+  .team-status__edit {
+    order: 3;
+    padding: 12px;
+  }
+  .team-status__action {
+    order: 4;
+    padding: 12px;
+  }
+  .team-status__logo {
+    order: 1;
+  }
+  .team-status__text {
+    order: 2;
+  }
+}
+
+.team-status__tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: #b7e9c3;
+  color: $ink;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.team-status__tag.neutral {
+  background: #eef2f9;
+  color: $ink-soft;
+}
+
+.team-status__count {
+  font-weight: 600;
+}
+
+.team-status__error {
+  margin-top: 8px;
+  margin-bottom: 18px;
+  color: #d65252;
+  font-weight: 600;
+}
+
+.ingame-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  background: radial-gradient(circle at center, rgba(30, 45, 70, 0.92), #0d1627);
+  backdrop-filter: blur(4px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(16px, 4vw, 28px);
+  padding: clamp(18px, 6vw, 36px);
+  color: inherit;
+  overflow: auto;
+}
+
+.ingame-overlay__controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: clamp(12px, 4vw, 24px);
+}
+
+.ingame-overlay .cta-wide {
+  min-width: clamp(220px, 40vw, 280px);
+  justify-content: center;
+}
+
+.ingame-overlay__formation {
+  width: min(92vw, 880px);
+  max-height: calc(100vh - 220px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 200ms ease;
+  transform-origin: center;
+}
+
+.ingame-overlay .formation {
+  width: 100%;
+  max-width: 880px;
+  margin: 0;
+}
+
+.ingame-formation {
+  padding: clamp(12px, 4vw, 24px);
+}
+
+.ingame-formation .line {
+  gap: clamp(18px, 4vw, 28px);
+}
+
+.ingame-formation .slot-card {
+  padding: clamp(22px, 5vw, 38px);
+  gap: clamp(16px, 4vw, 22px);
+  border-radius: 20px;
+  width: clamp(160px, 18vw, 220px);
+}
+
+.ingame-formation .slot-card .avatar {
+  width: clamp(120px, 22vw, 220px);
+  height: clamp(120px, 22vw, 220px);
+  border-width: 3px;
+  border-radius: 18px;
+}
+
+.ingame-formation .slot-card .name {
+  font-size: clamp(26px, 6.5vw, 48px);
+  color: $ink;
+}
+
+.ingame-formation .slot-card .tag {
+  font-size: clamp(18px, 5vw, 30px);
+  padding: clamp(8px, 2.4vw, 14px) clamp(20px, 5.6vw, 28px);
+  border-radius: 999px;
+  color: $ink;
+}
+
+.ingame-formation .quick {
+  margin-top: clamp(32px, 8vw, 56px);
+}
+
+.ingame-overlay.portrait .ingame-overlay__formation {
+  width: min(96vw, 720px);
+  max-height: calc(100vh - 200px);
+}
+
+.ingame-overlay.portrait .formation .line {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(20px, 6vw, 32px);
+}
+
+.ingame-overlay.portrait .formation .quick {
+  margin-top: clamp(40px, 12vw, 60px);
+}
+
+@media (max-width: 600px) {
+  .ingame-overlay {
+    padding: clamp(16px, 10vw, 28px);
+  }
+  .ingame-overlay__formation {
+    width: min(96vw, 680px);
+  }
+}
+
+.team-status--loading {
+  border-style: dashed;
+}
+
+.team-status--loading .team-status__logo {
+  background: linear-gradient(90deg, #eef2f9 25%, #f6f9ff 37%, #eef2f9 63%);
+  background-size: 400% 100%;
+  animation: shimmer 6s linear infinite;
+}
+
+.team-status--loading .skeleton-line {
+  height: 16px;
+  width: min(220px, 56%);
+}
+
+.team-status--loading .skeleton-pill {
+  height: 14px;
+  width: min(200px, 48%);
+}
+
 /* (ehem. Headline entfernt) */
 
 /* ---------- Controls unter der Aufstellung ---------- */
@@ -72,6 +343,28 @@ $blue-border: #7d92bf;
   }
   &.ghost {
     background: transparent;
+  }
+  &.tertiary {
+    background: #f7f9fc;
+    border-color: rgba(125, 146, 191, 0.28);
+    color: $ink-soft;
+    box-shadow: none;
+
+    &:hover {
+      background: #eef3fb;
+      color: $ink;
+    }
+  }
+  &.secondary {
+    background: #ffffff;
+    border-color: rgba(125, 146, 191, 0.35);
+    color: $ink;
+    box-shadow: 0 8px 18px rgba(31, 42, 55, 0.08);
+
+    &:hover {
+      background: #f5f8ff;
+      box-shadow: 0 12px 22px rgba(31, 42, 55, 0.14);
+    }
   }
   &.primary {
     background: #b7e9c3;
@@ -152,6 +445,19 @@ $blue-border: #7d92bf;
     animation: burstRing 620ms ease-out forwards;
     pointer-events: none;
   }
+
+  &[disabled] {
+    opacity: 0.6;
+    cursor: not-allowed;
+    box-shadow: none;
+    filter: saturate(0.8);
+  }
+}
+
+.ingame-toggle {
+  font-size: 13px;
+  padding: 8px 16px;
+  margin-top: 6px;
 }
 
 @keyframes shine {

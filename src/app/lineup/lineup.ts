@@ -5,6 +5,7 @@ import {
   inject,
   signal,
   effect,
+  computed,
 } from '@angular/core';
 import {
   ReactiveFormsModule,
@@ -16,6 +17,8 @@ import {
 import { Lineup, Player } from '../_interfaces/lineupInterface';
 import { LineupService } from '../lineup-service';
 import { RouterModule } from '@angular/router';
+import { TEAM_PLACEHOLDER } from '../_config/known-teams';
+import { TeamLoaderService } from '../team-loader.service';
 
 /* ---------- Consts ---------- */
 
@@ -41,6 +44,7 @@ export class LineupComponent {
   /* DI */
   private readonly fb = inject(FormBuilder);
   private readonly lineupService = inject(LineupService);
+  private readonly teamLoader = inject(TeamLoaderService);
 
   /* UI refs */
   @ViewChild('loadInput') loadInputRef!: ElementRef<HTMLInputElement>;
@@ -49,6 +53,10 @@ export class LineupComponent {
   /* Global, pro-App verfügbare Extras (Checkbox-Optionen) */
   globalSparExtras = signal<string[]>([]);
   globalChainExtras = signal<string[]>([]);
+  teamQuery = computed(() => {
+    const id = this.teamLoader.selectedTeamId();
+    return id ? { team: id } : {};
+  });
 
   /* State */
   players = signal<Player[]>([]);
@@ -56,11 +64,13 @@ export class LineupComponent {
 
   /* Header: Teamname */
   teamNameCtrl = this.fb.nonNullable.control('');
+  teamLogoCtrl = this.fb.nonNullable.control<string>(TEAM_PLACEHOLDER);
 
   /* Labels / Defaults */
   readonly quickLabel = 'Laufen';
   readonly baseSpars = ['LP', 'Schild', 'Stab', 'Q-Tip'] as const;
   readonly defaultAvatar = PLACEHOLDER_AVATAR;
+  readonly defaultTeamLogo = TEAM_PLACEHOLDER;
 
   /* Formular (Add + Edit) */
   addForm = this.fb.nonNullable.group({
@@ -104,6 +114,9 @@ export class LineupComponent {
 
     if (snapshot?.players?.length) this.players.set([...snapshot.players]);
     if (snapshot?.teamName) this.teamNameCtrl.setValue(snapshot.teamName);
+    if (snapshot?.teamLogo) {
+      this.teamLogoCtrl.setValue(snapshot.teamLogo, { emitEvent: false });
+    }
 
     // globale Extras aus vorhandenen Spielern ableiten
     if (snapshot?.players?.length) {
@@ -118,6 +131,10 @@ export class LineupComponent {
     // Teamname live persistieren
     this.teamNameCtrl.valueChanges.subscribe((name) => {
       this.lineupService.setLineup(this.currentLineup(name || undefined));
+    });
+
+    this.teamLogoCtrl.valueChanges.subscribe(() => {
+      this.lineupService.setLineup(this.currentLineup());
     });
 
     // Players-Änderungen persistieren
@@ -410,6 +427,9 @@ export class LineupComponent {
       // apply
       this.players.set([...json.players]);
       this.teamNameCtrl.setValue(json.teamName || '', { emitEvent: true });
+      this.teamLogoCtrl.setValue(json.teamLogo || this.defaultTeamLogo, {
+        emitEvent: true,
+      });
       this.resetFormToDefault();
 
       // globale listen aus geladenem lineup neu aufbauen
@@ -431,9 +451,25 @@ export class LineupComponent {
 
   /* ---------- Private helpers ---------- */
 
+  async onPickTeamLogo(ev: Event) {
+    const input = ev.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (!file) return;
+
+    try {
+      const dataUrl = await fileToDataUrl(file);
+      this.teamLogoCtrl.setValue(dataUrl || this.defaultTeamLogo, {
+        emitEvent: true,
+      });
+    } finally {
+      input.value = '';
+    }
+  }
+
   private currentLineup(overwriteName?: string): Lineup {
     const name = overwriteName ?? (this.teamNameCtrl.value || undefined);
-    return { players: this.players(), teamName: name };
+    const logo = this.teamLogoCtrl.value || undefined;
+    return { players: this.players(), teamName: name, teamLogo: logo };
   }
 }
 
@@ -492,6 +528,7 @@ function isLineup(x: any): x is Lineup {
 
   if (!okPlayers) return false;
   if (x.teamName != null && typeof x.teamName !== 'string') return false;
+  if (x.teamLogo != null && typeof x.teamLogo !== 'string') return false;
   return true;
 }
 

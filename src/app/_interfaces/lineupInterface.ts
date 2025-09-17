@@ -1,6 +1,7 @@
 export interface Lineup {
   players: Player[];
   teamName?: string;
+  teamLogo?: string;
 }
 
 export interface Player {

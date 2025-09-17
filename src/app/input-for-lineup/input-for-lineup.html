@@ -1,9 +1,118 @@
 <section class="wrap">
-  <div class="hero">
-    <button class="btn hero primary" type="button" (click)="loadDemo()">
-      Demo starten
-    </button>
-  </div>
+  <section class="landing-hero">
+    <div class="landing-hero__inner">
+      <div class="landing-hero__text">
+        <span class="landing-hero__eyebrow">Jugger Randomizer</span>
+        <h1 class="landing-hero__title">Lineups auf Knopfdruck.</h1>
+        <p class="landing-hero__lead">
+          Lade einen vorhandenen Kader, nutze ein Preset oder starte direkt mit
+          unserer Demo – der Generator baut dir in Sekunden eine spielbare
+          Aufstellung.
+        </p>
+        <div class="landing-hero__cta">
+          <button
+            class="btn hero primary"
+            type="button"
+            (click)="scrollToPresets()"
+          >
+            Team auswählen
+          </button>
+          <div class="landing-hero__cta-row">
+            <button class="btn secondary cta-wide" type="button" (click)="loadDemo()">
+              Demo starten
+            </button>
+            <a
+              class="btn secondary cta-wide"
+              [routerLink]="['/generator']"
+              [queryParams]="selectedTeamQuery()"
+              >Direkt zum Generator</a
+            >
+          </div>
+        </div>
+        <ul class="landing-hero__stats">
+          <li>⚡ Zufällige 5er-Aufstellungen mit Rollenlogik</li>
+          <li>🎯 Faire Einsätze dank Equalizer-Modus</li>
+          <li>📤 Spiele exportieren und teilen</li>
+        </ul>
+      </div>
+
+      <div class="landing-hero__preview">
+        <div class="preview-stack">
+          <article class="preview-card">
+            <span class="preview-avatar"></span>
+            <div class="preview-body">
+              <span class="preview-name">Leo</span>
+              <span class="preview-role">Laufen</span>
+            </div>
+          </article>
+          <article class="preview-card">
+            <span class="preview-avatar"></span>
+            <div class="preview-body">
+              <span class="preview-name">Rudolf</span>
+              <span class="preview-role">Kette (Normal)</span>
+            </div>
+          </article>
+          <article class="preview-card">
+            <span class="preview-avatar"></span>
+            <div class="preview-body">
+              <span class="preview-name">Alpha Schild</span>
+              <span class="preview-role">Schild</span>
+            </div>
+          </article>
+          <article class="preview-card">
+            <span class="preview-avatar"></span>
+            <div class="preview-body">
+              <span class="preview-name">Holzfäller</span>
+              <span class="preview-role">Stab</span>
+            </div>
+          </article>
+          <article class="preview-card">
+            <span class="preview-avatar"></span>
+            <div class="preview-body">
+              <span class="preview-name">David</span>
+              <span class="preview-role">LP</span>
+            </div>
+          </article>
+        </div>
+        <div class="preview-badge">Generator ready</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="quick-start" id="presetSection">
+    <section class="preset-rail">
+      <h3 class="h3">Vorausgewählte Teams</h3>
+      <div class="preset-grid">
+        @for (t of visibleTeams(); track t.id) {
+        <button
+          class="preset-card"
+          type="button"
+          (click)="loadKnownTeam(t)"
+          [disabled]="loadingTeamId() === t.id"
+        >
+          <figure
+            class="preset-card__image"
+            [class.loading]="loadingTeamId() === t.id"
+          >
+            <img [src]="teamPreview(t)" [alt]="t.label" />
+          </figure>
+          <div class="preset-card__body">
+            <span class="name">{{ t.label }}</span>
+            <span class="meta">
+              @if (loadingTeamId() === t.id) { wird geladen… } @else if
+              (t.source === 'inline') { Demo laden } @else { Preset laden }
+            </span>
+          </div>
+        </button>
+        }
+      </div>
+    </section>
+
+    <p class="quick-start__note">
+      Eigener Kader? Lade deine <code>.randomizer</code>-Datei oder erstelle
+      unten einen komplett neuen Kader.
+    </p>
+  </section>
 
   <div class="cards">
     <!-- Bestehenden Kader laden (Datei) -->
@@ -36,17 +145,4 @@
   </div>
 
   <hr class="sep" />
-
-  <!-- 👉 Already known Teams -->
-  <section class="known">
-    <h3 class="h3">Schnellladen</h3>
-    <div class="team-list">
-      @for (t of knownTeams; track t.label) {
-      <button class="team-btn" type="button" (click)="loadKnownTeam(t)">
-        <span class="name">{{ t.label }}</span>
-        <span class="meta">Shortcut laden</span>
-      </button>
-      }
-    </div>
-  </section>
 </section>

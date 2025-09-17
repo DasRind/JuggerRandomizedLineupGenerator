@@ -1,6 +1,6 @@
 <header class="site-header">
   <div class="site-header__inner">
-    <a class="brand" [routerLink]="['/landingpage']" aria-label="Startseite">
+    <a class="brand" [routerLink]="['/input']" aria-label="Startseite">
       <img
         class="logo"
         src="img/basics/randomizerLogo.png"
@@ -10,8 +10,13 @@
     </a>
 
     <nav class="nav">
-      <a class="link" [routerLink]="['/generator']">Generator</a>
-      <a class="link" [routerLink]="['/kader']">Kader</a>
+      <a class="link" href="#" (click)="goToTeams($event)">Teams</a>
+      <a class="link" [routerLink]="['/generator']" [queryParams]="teamQuery()"
+        >Generator</a
+      >
+      <a class="link" [routerLink]="['/kader']" [queryParams]="teamQuery()"
+        >Kader</a
+      >
       <!-- <a
         class="link ext"
         href="https://dasrind.github.io/JuggerRandomizedLineupGenerator/"
@@ -50,10 +55,14 @@
         target="_blank"
         rel="noopener"
       >
-        <img class="ico" src="media/contact/github-logo-black.png" alt="GitHub" />
+        <img
+          class="ico"
+          src="media/contact/github-logo-black.png"
+          alt="GitHub"
+        />
         <!-- <span>GitHub</span> -->
       </a>
-      <a
+      <!-- <a
         class="link"
         href="https://www.instagram.com/das_rind/"
         target="_blank"
@@ -64,8 +73,8 @@
           src="media/contact/instagram-logo-black.png"
           alt="Instagram"
         />
-        <!-- <span>Instagram</span> -->
-      </a>
+        <span>Instagram</span> 
+      </a> -->
     </nav>
   </div>
 </header>

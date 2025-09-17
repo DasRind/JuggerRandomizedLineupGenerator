@@ -1,15 +1,18 @@
 import {
   Component,
-  ElementRef,
+  HostListener,
+  OnDestroy,
+  computed,
   inject,
   signal,
-  ViewChild,
 } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormControl } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { LineupService } from '../lineup-service';
 import { Lineup, Player } from '../_interfaces/lineupInterface';
-import { NgStyle } from '@angular/common';
+import { NgStyle, NgTemplateOutlet } from '@angular/common';
+import { TeamLoaderService } from '../team-loader.service';
+import { TEAM_PLACEHOLDER, findKnownTeam } from '../_config/known-teams';
 
 type Mode = 'withChain' | 'noChain' | 'maybe';
 type Role = 'Quick' | 'Kette' | 'Pompfe';
@@ -35,15 +38,18 @@ const TEAM_SIZE = 5;
 @Component({
   selector: 'app-generator',
   standalone: true,
-  imports: [ReactiveFormsModule, NgStyle, RouterModule],
+  imports: [ReactiveFormsModule, NgStyle, NgTemplateOutlet, RouterModule],
   templateUrl: './generator.html',
   styleUrls: ['./generator.scss'],
 })
-export class GeneratorComponent {
+export class GeneratorComponent implements OnDestroy {
   private fb = inject(FormBuilder);
   private store = inject(LineupService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private teamLoader = inject(TeamLoaderService);
 
-  @ViewChild('lineupBlock') lineupBlock!: ElementRef<HTMLElement>;
+  private teamLoadToken: symbol | null = null;
 
   // Optionen
   form = this.fb.nonNullable.group({
@@ -67,6 +73,29 @@ export class GeneratorComponent {
   topRow = signal<Slot[]>([]);
   quickSlot = signal<Slot | null>(null);
   error = signal<string | null>(null);
+  teamLoading = signal(false);
+  teamError = signal<string | null>(null);
+  currentTeamId = signal<string | null>(null);
+  teamLabel = computed(() => {
+    const id = this.currentTeamId();
+    if (id) {
+      const known = findKnownTeam(id);
+      if (known) return known.label;
+    }
+    const lineup = this.store.lineup();
+    return lineup?.teamName ?? null;
+  });
+  playerCount = computed(() => this.store.lineup()?.players?.length ?? 0);
+  teamLogo = computed(() => this.store.lineup()?.teamLogo ?? TEAM_PLACEHOLDER);
+  teamQuery = computed(() => {
+    const id = this.currentTeamId();
+    return id ? { team: id } : {};
+  });
+  ingameMode = signal(false);
+  private ingamePortrait = signal(false);
+  ingamePortraitMode = computed(
+    () => this.ingameMode() && this.ingamePortrait()
+  );
 
   constructor() {
     // erstes Spiel anlegen
@@ -82,6 +111,15 @@ export class GeneratorComponent {
         return copy;
       });
     });
+
+    this.route.queryParamMap.subscribe((params) => {
+      const teamId = params.get('team');
+      void this.applyTeamFromParam(teamId);
+    });
+  }
+
+  ngOnDestroy() {
+    this.lockBodyScroll(false);
   }
 
   animGate = signal(false); // false = ausgeblendet (Reset), true = animieren
@@ -189,9 +227,80 @@ export class GeneratorComponent {
     return new Date(ts).toLocaleTimeString();
   }
 
+  private async applyTeamFromParam(teamId: string | null) {
+    const token = Symbol('team-load');
+    this.teamLoadToken = token;
+
+    if (!teamId) {
+      this.teamLoader.setSelectedTeam(null);
+      this.teamLoadToken = null;
+      this.currentTeamId.set(null);
+      this.teamLoading.set(false);
+      this.teamError.set(null);
+      return;
+    }
+
+    const known = findKnownTeam(teamId);
+    if (!known) {
+      this.teamLoader.setSelectedTeam(null);
+      this.teamLoadToken = null;
+      this.currentTeamId.set(null);
+      this.teamLoading.set(false);
+      this.teamError.set('Unbekanntes Team in der URL.');
+      void this.router.navigate([], {
+        queryParams: { team: null },
+        queryParamsHandling: 'merge',
+      });
+      return;
+    }
+
+    const existing = this.store.lineup();
+    if (existing && this.teamLoader.selectedTeamId() === teamId) {
+      this.currentTeamId.set(teamId);
+      this.teamLoader.setSelectedTeam(teamId);
+      this.teamError.set(null);
+      this.teamLoading.set(false);
+      this.teamLoadToken = null;
+      return;
+    }
+
+    if (this.currentTeamId() === teamId && this.store.lineup()) {
+      this.teamError.set(null);
+      this.teamLoadToken = null;
+      this.teamLoader.setSelectedTeam(teamId);
+      return;
+    }
+
+    this.teamError.set(null);
+    this.teamLoading.set(true);
+    this.currentTeamId.set(teamId);
+    this.error.set(null);
+    this.topRow.set([]);
+    this.quickSlot.set(null);
+
+    try {
+      const lineup = await this.teamLoader.loadTeam(teamId);
+      if (this.teamLoadToken !== token) return;
+      this.store.setLineup(lineup);
+    } catch (error) {
+      if (this.teamLoadToken !== token) return;
+      console.error('Team konnte nicht geladen werden:', error);
+      this.teamError.set('Team konnte nicht geladen werden.');
+      this.store.setLineup(null);
+      this.teamLoader.setSelectedTeam(null);
+    } finally {
+      if (this.teamLoadToken === token) {
+        this.teamLoading.set(false);
+        this.teamLoadToken = null;
+      }
+    }
+  }
+
   /* ---------- Generieren ---------- */
 
   async generate() {
+    if (this.teamLoading()) return;
+
     // lustige Button-Animation (Burst)
     if (this.burstTimer) clearTimeout(this.burstTimer);
     this.bursting.set(false);
@@ -301,10 +410,11 @@ export class GeneratorComponent {
       const chainPlayer = pickFair(chainsOK);
       pool = pool.filter((p) => p.name !== chainPlayer.name);
       const chainType = rand(chainPlayer.chains) ?? 'Normal';
+      const chainLabel = this.formatChainLabel(chainType);
       slots.push({
         role: 'Kette',
         player: chainPlayer,
-        kindLabel: `Kette (${chainType})`,
+        kindLabel: chainLabel,
       });
     }
 
@@ -322,7 +432,8 @@ export class GeneratorComponent {
         pick.spars && pick.spars.length
           ? rand(pick.spars) ?? 'Pompfe'
           : 'Pompfe';
-      slots.push({ role: 'Pompfe', player: pick, kindLabel: kind });
+      const pompLabel = this.formatPompLabel(kind);
+      slots.push({ role: 'Pompfe', player: pick, kindLabel: pompLabel });
       remaining = remaining.filter((p) => p.name !== pick.name);
       pool = pool.filter((p) => p.name !== pick.name);
     }
@@ -371,13 +482,67 @@ export class GeneratorComponent {
     this.animRunId.update((n) => n + 1); // 👉 triggert neue Zufallswerte pro Run
     await new Promise((resolve) => {
       setTimeout(() => {
-        this.lineupBlock?.nativeElement.scrollIntoView({
-          behavior: 'smooth',
-        });
+        if (typeof window !== 'undefined') {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
         resolve(null);
       }, 50);
     });
     this.triggerAllAnimations();
+  }
+
+  async goToInput() {
+    const query = this.teamQuery();
+    const hasTeam = Object.keys(query).length > 0;
+
+    if (this.router.url.startsWith('/input')) {
+      this.scrollToTeams();
+      return;
+    }
+
+    await this.router.navigate(
+      ['/input'],
+      hasTeam ? { queryParams: query } : undefined
+    );
+    setTimeout(() => this.scrollToTeams(), 80);
+  }
+
+  toggleIngame() {
+    const next = !this.ingameMode();
+    this.ingameMode.set(next);
+    if (next) {
+      this.updateIngameOrientation();
+      this.lockBodyScroll(true);
+    } else {
+      this.ingamePortrait.set(false);
+      this.lockBodyScroll(false);
+    }
+  }
+
+  @HostListener('window:resize')
+  onWindowResize() {
+    if (this.ingameMode()) this.updateIngameOrientation();
+  }
+
+  @HostListener('window:orientationchange')
+  onOrientationChange() {
+    if (this.ingameMode()) this.updateIngameOrientation();
+  }
+
+  private scrollToTeams() {
+    if (typeof window === 'undefined') return;
+    const el = document.getElementById('presetSection');
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  private updateIngameOrientation() {
+    if (typeof window === 'undefined') return;
+    this.ingamePortrait.set(window.innerHeight > window.innerWidth);
+  }
+
+  private lockBodyScroll(active: boolean) {
+    if (typeof document === 'undefined') return;
+    document.body.style.overflow = active ? 'hidden' : '';
   }
 
   /* ---------- Fehlermeldungen ---------- */
@@ -417,6 +582,23 @@ mit Kette: benötigt 3 Pompfen-Spieler + 1 Kette, vorhanden ${sparersWithChain} 
       t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
       return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
     };
+  }
+
+  private formatPompLabel(kind: string | null | undefined): string {
+    const trimmed = (kind ?? '').trim();
+    if (!trimmed) return 'Pompfe';
+    const paren = trimmed.match(/\(([^)]+)\)/);
+    if (paren && paren[1].trim()) return paren[1].trim();
+    if (/^pompfe$/i.test(trimmed)) return 'Pompfe';
+    return trimmed;
+  }
+
+  private formatChainLabel(kind: string | null | undefined): string {
+    const trimmed = (kind ?? '').trim();
+    if (!trimmed || trimmed === 'Normal') return 'Kette';
+    const paren = trimmed.match(/\(([^)]+)\)/);
+    const value = paren && paren[1].trim() ? paren[1].trim() : trimmed;
+    return `Kette (${value})`;
   }
 
   /** Styles (CSS-Variablen) pro Slot – leicht variiert je Run & Index */

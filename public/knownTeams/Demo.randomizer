@@ -1,0 +1,84 @@
+{
+  "players": [
+    {
+      "name": "Lea",
+      "profilePicture": "data:image/svg+xml;utf8,%0A%20%20%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22160%22%20height%3D%22160%22%20viewBox%3D%220%200%20160%20160%22%3E%0A%20%20%20%20%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20rx%3D%2212%22%20fill%3D%22%23ffffff%22%20stroke%3D%22%231f2a37%22%20stroke-width%3D%224%22%2F%3E%0A%20%20%20%20%3Ccircle%20cx%3D%2280%22%20cy%3D%2268%22%20r%3D%2226%22%20fill%3D%22none%22%20stroke%3D%22%231f2a37%22%20stroke-width%3D%224%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M36%20130c10-22%2034-26%2044-26s34%204%2044%2026%22%20fill%3D%22none%22%20stroke%3D%22%231f2a37%22%20stroke-width%3D%224%22%20stroke-linecap%3D%22round%22%2F%3E%0A%20%20%3C%2Fsvg%3E",
+      "quick": [
+        "Laufen"
+      ],
+      "spars": [
+        "LP",
+        "Q-Tip"
+      ],
+      "chains": []
+    },
+    {
+      "name": "Rufus",
+      "profilePicture": "data:image/svg+xml;utf8,%0A%20%20%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22160%22%20height%3D%22160%22%20viewBox%3D%220%200%20160%20160%22%3E%0A%20%20%20%20%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20rx%3D%2212%22%20fill%3D%22%23ffffff%22%20stroke%3D%22%231f2a37%22%20stroke-width%3D%224%22%2F%3E%0A%20%20%20%20%3Ccircle%20cx%3D%2280%22%20cy%3D%2268%22%20r%3D%2226%22%20fill%3D%22none%22%20stroke%3D%22%231f2a37%22%20stroke-width%3D%224%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M36%20130c10-22%2034-26%2044-26s34%204%2044%2026%22%20fill%3D%22none%22%20stroke%3D%22%231f2a37%22%20stroke-width%3D%224%22%20stroke-linecap%3D%22round%22%2F%3E%0A%20%20%3C%2Fsvg%3E",
+      "quick": [],
+      "spars": [
+        "Stab"
+      ],
+      "chains": [
+        "Oben"
+      ]
+    },
+    {
+      "name": "Quick",
+      "profilePicture": "data:image/svg+xml;utf8,%0A%20%20%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22160%22%20height%3D%22160%22%20viewBox%3D%220%200%20160%20160%22%3E%0A%20%20%20%20%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20rx%3D%2212%22%20fill%3D%22%23ffffff%22%20stroke%3D%22%231f2a37%22%20stroke-width%3D%224%22%2F%3E%0A%20%20%20%20%3Ccircle%20cx%3D%2280%22%20cy%3D%2268%22%20r%3D%2226%22%20fill%3D%22none%22%20stroke%3D%22%231f2a37%22%20stroke-width%3D%224%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M36%20130c10-22%2034-26%2044-26s34%204%2044%2026%22%20fill%3D%22none%22%20stroke%3D%22%231f2a37%22%20stroke-width%3D%224%22%20stroke-linecap%3D%22round%22%2F%3E%0A%20%20%3C%2Fsvg%3E",
+      "quick": [
+        "Laufen"
+      ],
+      "spars": [],
+      "chains": []
+    },
+    {
+      "name": "Alpha Schild",
+      "profilePicture": "data:image/svg+xml;utf8,%0A%20%20%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22160%22%20height%3D%22160%22%20viewBox%3D%220%200%20160%20160%22%3E%0A%20%20%20%20%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20rx%3D%2212%22%20fill%3D%22%23ffffff%22%20stroke%3D%22%231f2a37%22%20stroke-width%3D%224%22%2F%3E%0A%20%20%20%20%3Ccircle%20cx%3D%2280%22%20cy%3D%2268%22%20r%3D%2226%22%20fill%3D%22none%22%20stroke%3D%22%231f2a37%22%20stroke-width%3D%224%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M36%20130c10-22%2034-26%2044-26s34%204%2044%2026%22%20fill%3D%22none%22%20stroke%3D%22%231f2a37%22%20stroke-width%3D%224%22%20stroke-linecap%3D%22round%22%2F%3E%0A%20%20%3C%2Fsvg%3E",
+      "quick": [],
+      "spars": [
+        "Schild"
+      ],
+      "chains": []
+    },
+    {
+      "name": "Rudolf",
+      "profilePicture": "data:image/svg+xml;utf8,%0A%20%20%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22160%22%20height%3D%22160%22%20viewBox%3D%220%200%20160%20160%22%3E%0A%20%20%20%20%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20rx%3D%2212%22%20fill%3D%22%23ffffff%22%20stroke%3D%22%231f2a37%22%20stroke-width%3D%224%22%2F%3E%0A%20%20%20%20%3Ccircle%20cx%3D%2280%22%20cy%3D%2268%22%20r%3D%2226%22%20fill%3D%22none%22%20stroke%3D%22%231f2a37%22%20stroke-width%3D%224%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M36%20130c10-22%2034-26%2044-26s34%204%2044%2026%22%20fill%3D%22none%22%20stroke%3D%22%231f2a37%22%20stroke-width%3D%224%22%20stroke-linecap%3D%22round%22%2F%3E%0A%20%20%3C%2Fsvg%3E",
+      "quick": [],
+      "spars": [
+        "LP",
+        "Stab"
+      ],
+      "chains": []
+    },
+    {
+      "name": "Felia",
+      "profilePicture": "data:image/svg+xml;utf8,%0A%20%20%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22160%22%20height%3D%22160%22%20viewBox%3D%220%200%20160%20160%22%3E%0A%20%20%20%20%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20rx%3D%2212%22%20fill%3D%22%23ffffff%22%20stroke%3D%22%231f2a37%22%20stroke-width%3D%224%22%2F%3E%0A%20%20%20%20%3Ccircle%20cx%3D%2280%22%20cy%3D%2268%22%20r%3D%2226%22%20fill%3D%22none%22%20stroke%3D%22%231f2a37%22%20stroke-width%3D%224%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M36%20130c10-22%2034-26%2044-26s34%204%2044%2026%22%20fill%3D%22none%22%20stroke%3D%22%231f2a37%22%20stroke-width%3D%224%22%20stroke-linecap%3D%22round%22%2F%3E%0A%20%20%3C%2Fsvg%3E",
+      "quick": [
+        "Laufen"
+      ],
+      "spars": [
+        "LP"
+      ],
+      "chains": [
+        "Normal"
+      ]
+    },
+    {
+      "name": "Tim",
+      "profilePicture": "data:image/svg+xml;utf8,%0A%20%20%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22160%22%20height%3D%22160%22%20viewBox%3D%220%200%20160%20160%22%3E%0A%20%20%20%20%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20rx%3D%2212%22%20fill%3D%22%23ffffff%22%20stroke%3D%22%231f2a37%22%20stroke-width%3D%224%22%2F%3E%0A%20%20%20%20%3Ccircle%20cx%3D%2280%22%20cy%3D%2268%22%20r%3D%2226%22%20fill%3D%22none%22%20stroke%3D%22%231f2a37%22%20stroke-width%3D%224%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M36%20130c10-22%2034-26%2044-26s34%204%2044%2026%22%20fill%3D%22none%22%20stroke%3D%22%231f2a37%22%20stroke-width%3D%224%22%20stroke-linecap%3D%22round%22%2F%3E%0A%20%20%3C%2Fsvg%3E",
+      "quick": [],
+      "spars": [
+        "LP",
+        "Schild",
+        "Stab",
+        "Q-Tip"
+      ],
+      "chains": [
+        "Normal"
+      ]
+    }
+  ],
+  "teamName": "Demo",
+  "teamLogo": "data:image/svg+xml;utf8,%0A%20%20%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22160%22%20height%3D%22160%22%20viewBox%3D%220%200%20160%20160%22%3E%0A%20%20%20%20%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20rx%3D%2212%22%20fill%3D%22%23ffffff%22%20stroke%3D%22%231f2a37%22%20stroke-width%3D%224%22%2F%3E%0A%20%20%20%20%3Ccircle%20cx%3D%2280%22%20cy%3D%2268%22%20r%3D%2226%22%20fill%3D%22none%22%20stroke%3D%22%231f2a37%22%20stroke-width%3D%224%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M36%20130c10-22%2034-26%2044-26s34%204%2044%2026%22%20fill%3D%22none%22%20stroke%3D%22%231f2a37%22%20stroke-width%3D%224%22%20stroke-linecap%3D%22round%22%2F%3E%0A%20%20%3C%2Fsvg%3E"
+}

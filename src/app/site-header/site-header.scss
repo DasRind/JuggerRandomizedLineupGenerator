@@ -10,6 +10,9 @@ $brand-blue-soft: #cfe0ff;
 $content-width: min(1100px, 94vw);
 
 .site-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
   background: linear-gradient(90deg, $ink 0%, #23424e 55%, $brand-blue 100%);
   color: #fff;
   padding: 10px clamp(12px, 3vw, 20px);
@@ -48,7 +51,7 @@ $content-width: min(1100px, 94vw);
   letter-spacing: 0.02em;
 }
 
-@media (max-width: 380px) {
+@media (max-width: 610px) {
   .brand .title { display: none; }
   .brand .logo { width: 30px; height: 30px; }
 }
