@@ -36,7 +36,7 @@ $blue-border: #7d92bf;
 .team-status {
   display: grid;
   gap: 8px;
-  margin: 18px 0;
+  margin-bottom: 18px;
   padding: 12px 16px;
   border: 1px solid $line;
   border-radius: 14px;
@@ -180,17 +180,34 @@ $blue-border: #7d92bf;
 .ingame-overlay {
   position: fixed;
   inset: 0;
-  z-index: 1200;
-  background: radial-gradient(circle at center, rgba(30, 45, 70, 0.92), #0d1627);
+  z-index: 2000;
+  background: radial-gradient(
+    circle at center,
+    rgba(30, 45, 70, 0.92),
+    #0d1627
+  );
   backdrop-filter: blur(4px);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: clamp(16px, 4vw, 28px);
-  padding: clamp(18px, 6vw, 36px);
-  color: inherit;
-  overflow: auto;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  padding-bottom: clamp(4px, calc(var(--ing-short) * 0.015), 16px);
+
+  /* dynamische Größensteuerung für das Overlay */
+  --ing-long: max(100vw, 100vh);
+  --ing-short: min(100vw, 100vh);
+  --ing-gap: clamp(4px, calc(var(--ing-short) * 0.02), 20px);
+  --ing-card-padding: clamp(4px, calc(var(--ing-short) * 0.05), 18px);
+  --ing-card-gap: clamp(4px, calc(var(--ing-short) * 0.03), 16px);
+  --ing-avatar-size: clamp(52px, calc(var(--ing-short) * 0.35), 220px);
+  --ing-name-size: clamp(13px, calc(var(--ing-short) * 0.07), 28px);
+  --ing-tag-size: clamp(10px, calc(var(--ing-short) * 0.045), 18px);
+  --ing-tag-pad-y: clamp(3px, calc(var(--ing-short) * 0.012), 10px);
+  --ing-tag-pad-x: clamp(6px, calc(var(--ing-short) * 0.035), 16px);
+}
+
+.ingame-overlay__formation {
+  height: 100%;
+  width: 100%;
 }
 
 .ingame-overlay__controls {
@@ -207,81 +224,26 @@ $blue-border: #7d92bf;
   justify-content: center;
 }
 
-.ingame-overlay__formation {
-  width: min(92vw, 880px);
-  max-height: calc(100vh - 220px);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transition: transform 200ms ease;
-  transform-origin: center;
-}
-
-.ingame-overlay .formation {
-  width: 100%;
-  max-width: 880px;
-  margin: 0;
-}
-
-.ingame-formation {
-  padding: clamp(12px, 4vw, 24px);
-}
-
-.ingame-formation .line {
-  gap: clamp(18px, 4vw, 28px);
-}
-
 .ingame-formation .slot-card {
-  padding: clamp(22px, 5vw, 38px);
-  gap: clamp(16px, 4vw, 22px);
-  border-radius: 20px;
-  width: clamp(160px, 18vw, 220px);
+  padding: initial;
+  width: auto;
 }
-
 .ingame-formation .slot-card .avatar {
-  width: clamp(120px, 22vw, 220px);
-  height: clamp(120px, 22vw, 220px);
-  border-width: 3px;
-  border-radius: 18px;
+  width: 92px;
+  height: 92px;
+  border-width: 2px;
+  border-radius: 14px;
 }
-
 .ingame-formation .slot-card .name {
-  font-size: clamp(26px, 6.5vw, 48px);
-  color: $ink;
+  font-size: inherit;
 }
-
 .ingame-formation .slot-card .tag {
-  font-size: clamp(18px, 5vw, 30px);
-  padding: clamp(8px, 2.4vw, 14px) clamp(20px, 5.6vw, 28px);
-  border-radius: 999px;
-  color: $ink;
+  font-size: inherit;
+  padding: 2px 8px;
 }
 
 .ingame-formation .quick {
   margin-top: clamp(32px, 8vw, 56px);
-}
-
-.ingame-overlay.portrait .ingame-overlay__formation {
-  width: min(96vw, 720px);
-  max-height: calc(100vh - 200px);
-}
-
-.ingame-overlay.portrait .formation .line {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(20px, 6vw, 32px);
-}
-
-.ingame-overlay.portrait .formation .quick {
-  margin-top: clamp(40px, 12vw, 60px);
-}
-
-@media (max-width: 600px) {
-  .ingame-overlay {
-    padding: clamp(16px, 10vw, 28px);
-  }
-  .ingame-overlay__formation {
-    width: min(96vw, 680px);
-  }
 }
 
 .team-status--loading {
@@ -524,8 +486,10 @@ $blue-border: #7d92bf;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: 999px;
-  padding: 5px 9px;
+  font-weight: 400;
+  letter-spacing: 0.03em;
+  padding: 10px 16px;
+
   cursor: pointer;
   user-select: none;
   color: $ink-soft;
@@ -634,6 +598,7 @@ $blue-border: #7d92bf;
   place-items: center;
   text-align: center;
   min-width: 0;
+  min-height: clamp(100px, 22vw, 220px);
   overflow: hidden;
   box-shadow: 0 6px 18px rgba(31, 42, 55, 0.08);
   transition: box-shadow 160ms ease, transform 160ms ease, background 160ms ease;
@@ -1022,6 +987,11 @@ $blue-border: #7d92bf;
 
 .formation.anim-on .slot-card.anim {
   animation: cardIn var(--dur, 500ms) ease-out var(--delay, 0ms) both;
+  /* zusätzlich zu .formation.anim-on ... */
+}
+
+.ingame-formation.anim-on .slot-card.anim {
+  animation: cardIn var(--dur, 500ms) ease-out var(--delay, 0ms) both;
 }
 
 @keyframes cardIn {
@@ -1153,4 +1123,197 @@ $blue-border: #7d92bf;
     font-size: 10px;
     padding: 2px 5px;
   }
+}
+
+/* Ingame Layout */
+.ingame-formation {
+  height: 100%;
+}
+
+.ingame-board {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ing-gap);
+  height: 100%;
+  padding: var(--ing-gap);
+  min-height: 0;
+}
+
+.ingame-top {
+  flex: 1 1 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--ing-card-gap);
+  align-items: stretch;
+  justify-items: stretch;
+  min-height: 0;
+}
+
+.ingame-bottom {
+  flex: 1 1 0;
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1fr) minmax(0, 0.95fr);
+  gap: var(--ing-card-gap);
+  align-items: stretch;
+  min-height: 0;
+}
+
+.ingame-bottom .btnContainer {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  min-width: 0;
+}
+
+.ingame-bottom .btnContainer:nth-child(1) {
+  justify-content: flex-end;
+}
+
+.ingame-bottom .btnContainer:nth-child(3) {
+  justify-content: flex-start;
+}
+
+.ingame-bottom .btn.cta {
+  width: 100%;
+  min-height: clamp(40px, calc(var(--ing-short) * 0.1), 80px);
+}
+
+.ingame-btn.cta {
+  padding: clamp(10px, calc(var(--ing-short) * 0.06), 24px)
+    clamp(16px, calc(var(--ing-short) * 0.1), 32px);
+  border-radius: clamp(10px, calc(var(--ing-short) * 0.035), 22px);
+  font-size: clamp(15px, calc(var(--ing-short) * 0.07), 28px);
+  line-height: 1.1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.btn.secondary.ingame-btn.cta {
+  background: #ffffff;
+  border-color: rgba(125, 146, 191, 0.35);
+  box-shadow: 0 8px 18px rgba(31, 42, 55, 0.1);
+}
+
+.toggle-equalize {
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  padding: 10px 16px;
+  transition: background 160ms ease, color 160ms ease, border-color 160ms ease;
+}
+.toggle-equalize.active {
+  background: var(--blue);
+  border-color: var(--blue-border);
+  color: var(--ink);
+}
+
+.ingame-quick {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  min-width: 0;
+  min-height: 0;
+}
+
+.ingame-quick .slot-card {
+  width: 100%;
+  max-width: clamp(180px, calc(var(--ing-short) * 0.75), 320px);
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  column-gap: clamp(4px, calc(var(--ing-short) * 0.03), 16px);
+  row-gap: clamp(4px, calc(var(--ing-short) * 0.02), 10px);
+}
+
+.ingame-overlay .slot-card {
+  padding: var(--ing-card-padding);
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  column-gap: clamp(4px, calc(var(--ing-short) * 0.03), 16px);
+  row-gap: clamp(4px, calc(var(--ing-short) * 0.02), 10px);
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+}
+
+.ingame-overlay .slot-card .avatar {
+  width: 100%;
+  max-width: var(--ing-avatar-size);
+  aspect-ratio: 1 / 1;
+  border-width: 3px;
+  border-radius: clamp(18px, calc(var(--ing-avatar-size) * 0.12), 36px);
+  overflow: hidden;
+  justify-self: stretch;
+}
+
+.ingame-overlay .slot-card .text {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(4px, calc(var(--ing-short) * 0.02), 10px);
+  min-width: 0;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.ingame-overlay .slot-card .avatar img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ingame-overlay .slot-card .name {
+  font-size: var(--ing-name-size);
+  line-height: 1.05;
+  text-align: left;
+  word-break: break-word;
+  hyphens: auto;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.ingame-overlay .slot-card .tag {
+  font-size: var(--ing-tag-size);
+  padding: var(--ing-tag-pad-y) var(--ing-tag-pad-x);
+  border-radius: 999px;
+  display: inline-flex;
+  align-self: flex-start;
+  white-space: nowrap;
+  flex: 0 0 auto;
+}
+
+@media (min-aspect-ratio: 1/1) {
+  .ingame-overlay .slot-card .text {
+    flex-direction: row;
+    align-items: center;
+    gap: clamp(6px, calc(var(--ing-short) * 0.03), 14px);
+  }
+
+  .ingame-overlay .slot-card .tag {
+    align-self: center;
+  }
+}
+
+/* Fläche zum Rotieren/Skalieren */
+.ingame-rotor {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform-origin: center center;
+  transform: translate(-50%, -50%) rotate(var(--ing-rot, 0deg))
+    scale(var(--ing-scale, 1));
+}
+
+.ingame-overlay .ingame-rotor,
+.ingame-overlay .ingame-board {
+  width: 100%;
+  height: 100%;
+}
+
+.ingame-rotor.measuring {
+  visibility: hidden;
 }

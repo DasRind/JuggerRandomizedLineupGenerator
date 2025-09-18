@@ -24,7 +24,6 @@ $blue-border: #7d92bf;
   padding: 12px clamp(10px, 3vw, 16px) 24px;
 }
 
-
 .landing-hero {
   margin: 18px 0 36px;
   padding: clamp(18px, 4vw, 36px);
@@ -40,13 +39,19 @@ $blue-border: #7d92bf;
     position: absolute;
     inset: 18px;
     border-radius: 24px;
-    border: 1px dashed rgba(125, 146, 191, 0.18);
+    // border: 1px dashed rgba(125, 146, 191, 0.18);
     pointer-events: none;
   }
 
   @media (max-width: 820px) {
     padding: clamp(16px, 6vw, 28px);
     border-radius: 22px;
+  }
+
+  @media (max-width: 450px) {
+    &::after {
+      border: none;
+    }
   }
 }
 

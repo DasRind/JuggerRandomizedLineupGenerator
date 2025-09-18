@@ -9,6 +9,20 @@ $blue-border: #7d92bf;
   color: $ink;
 }
 
+.content {
+  padding-bottom: clamp(24px, 6vw, 56px);
+
+  @media (max-width: 800px) {
+    padding-left: clamp(16px, 6vw, 32px);
+    padding-right: clamp(16px, 6vw, 32px);
+  }
+
+  @media (min-width: 801px) {
+    padding-left: clamp(12px, 3vw, 24px);
+    padding-right: clamp(12px, 3vw, 24px);
+  }
+}
+
 /* Grid-Layout für Hauptseite */
 .grid {
   display: grid;
@@ -380,6 +394,8 @@ $blue-border: #7d92bf;
 
   @media (max-width: 640px) {
     flex-wrap: wrap;
+    padding: 0 clamp(18px, 6vw, 28px);
+    padding-bottom: 12px;
   }
 
   .left {

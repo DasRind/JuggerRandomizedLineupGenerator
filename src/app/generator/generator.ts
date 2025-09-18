@@ -5,6 +5,7 @@ import {
   computed,
   inject,
   signal,
+  AfterViewInit,
 } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
@@ -42,19 +43,23 @@ const TEAM_SIZE = 5;
   templateUrl: './generator.html',
   styleUrls: ['./generator.scss'],
 })
-export class GeneratorComponent implements OnDestroy {
+export class GeneratorComponent implements OnDestroy, AfterViewInit {
   private fb = inject(FormBuilder);
   private store = inject(LineupService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private teamLoader = inject(TeamLoaderService);
 
+  private boardResizeObs: ResizeObserver | null = null;
+  private mmPortrait: MediaQueryList | null = null;
+  private mmPortraitHandler: (() => void) | null = null;
+
   private teamLoadToken: symbol | null = null;
 
   // Optionen
   form = this.fb.nonNullable.group({
     mode: 'withChain' as Mode,
-    equalize: false,
+    equalize: true,
   });
 
   // Signatur wie bei ngFor: (index, item)
@@ -92,11 +97,6 @@ export class GeneratorComponent implements OnDestroy {
     return id ? { team: id } : {};
   });
   ingameMode = signal(false);
-  private ingamePortrait = signal(false);
-  ingamePortraitMode = computed(
-    () => this.ingameMode() && this.ingamePortrait()
-  );
-
   constructor() {
     // erstes Spiel anlegen
     this.createNewGame();
@@ -120,6 +120,24 @@ export class GeneratorComponent implements OnDestroy {
 
   ngOnDestroy() {
     this.lockBodyScroll(false);
+    if (this.mmPortrait && this.mmPortraitHandler) {
+      try {
+        this.mmPortrait.removeEventListener('change', this.mmPortraitHandler);
+      } catch {
+        /* Safari */ /* @ts-ignore */ this.mmPortrait.removeListener(
+          this.mmPortraitHandler
+        );
+      }
+    }
+    this.mmPortrait = null;
+    this.mmPortraitHandler = null;
+    this.disconnectBoardObserver();
+  }
+
+  ngAfterViewInit(): void {
+    if (typeof window !== 'undefined' && 'matchMedia' in window) {
+      this.mmPortrait = window.matchMedia('(orientation: portrait)');
+    }
   }
 
   animGate = signal(false); // false = ausgeblendet (Reset), true = animieren
@@ -511,22 +529,17 @@ export class GeneratorComponent implements OnDestroy {
     const next = !this.ingameMode();
     this.ingameMode.set(next);
     if (next) {
-      this.updateIngameOrientation();
+      this.connectBoardObserver();
       this.lockBodyScroll(true);
     } else {
-      this.ingamePortrait.set(false);
+      this.disconnectBoardObserver();
       this.lockBodyScroll(false);
     }
   }
 
-  @HostListener('window:resize')
-  onWindowResize() {
-    if (this.ingameMode()) this.updateIngameOrientation();
-  }
-
-  @HostListener('window:orientationchange')
-  onOrientationChange() {
-    if (this.ingameMode()) this.updateIngameOrientation();
+  toggleEqualize() {
+    const current = !!this.form.controls.equalize.value;
+    this.form.controls.equalize.setValue(!current, { emitEvent: true });
   }
 
   private scrollToTeams() {
@@ -535,9 +548,30 @@ export class GeneratorComponent implements OnDestroy {
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
-  private updateIngameOrientation() {
-    if (typeof window === 'undefined') return;
-    this.ingamePortrait.set(window.innerHeight > window.innerWidth);
+  private connectBoardObserver() {
+    if (this.boardResizeObs) return;
+    if (typeof ResizeObserver === 'undefined') return;
+    const overlay = document.querySelector(
+      '.ingame-overlay'
+    ) as HTMLElement | null;
+    if (!overlay) {
+      const raf =
+        typeof window !== 'undefined' && window.requestAnimationFrame
+          ? window.requestAnimationFrame.bind(window)
+          : null;
+      if (raf) raf(() => this.connectBoardObserver());
+      return;
+    }
+    this.boardResizeObs = new ResizeObserver((entries) => {
+      const rect = entries[0]?.contentRect;
+    });
+    this.boardResizeObs.observe(overlay);
+  }
+  private disconnectBoardObserver() {
+    if (this.boardResizeObs) {
+      this.boardResizeObs.disconnect();
+      this.boardResizeObs = null;
+    }
   }
 
   private lockBodyScroll(active: boolean) {

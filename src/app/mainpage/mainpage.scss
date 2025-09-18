@@ -1,9 +1,14 @@
 $page-w: min(1100px, 94vw);
 
+
+.site-header-spacer {
+  height: calc(var(--site-header-h, 82px) + env(safe-area-inset-top, 0px));
+}
+
 .page {
   margin: 0 auto;
   max-width: $page-w;
-  padding: 20px clamp(10px, 3vw, 16px);
+  padding: 20px clamp(10px, 3vw, 16px) 20px;
 
   /* Auf sehr kleinen Screens Platz maximieren */
   @media (max-width: 540px) {

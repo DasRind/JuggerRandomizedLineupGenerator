@@ -3,6 +3,16 @@ html,
 body {
   height: 100%;
 }
+
+html {
+  scrollbar-width: none; /* kein Balken */
+}
+
+/* Für WebKit (Chrome, Edge, Safari, Opera) */
+html::-webkit-scrollbar {
+  display: none; /* Scrollbar unsichtbar */
+}
+
 body {
   margin: 0;
   -webkit-font-smoothing: antialiased;
@@ -21,14 +31,18 @@ body {
   --brand-green-soft: #b7e9c3;
   --btn-shadow: 0 2px 8px rgba(31, 42, 55, 0.08);
   --btn-shadow-hover: 0 6px 16px rgba(31, 42, 55, 0.16);
+  --site-header-h: 82px;
 }
 
 /* Global: robustes Box-Modell und angenehmere Mobile-Defaults */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
-img, video {
+img,
+video {
   max-width: 100%;
   height: auto;
 }

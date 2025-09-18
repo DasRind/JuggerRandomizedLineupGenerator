@@ -111,18 +111,21 @@
     >
       GENERIEREN
     </button>
-    <button
+    <!-- <button
       class="btn tertiary ingame-toggle"
       type="button"
       (click)="toggleIngame()"
       [disabled]="teamLoading()"
     >
-      INGAME: {{ ingameMode() ? 'AN' : 'AUS' }}
-    </button>
+      INGAME: {{ ingameMode() ? "AN" : "AUS" }}
+    </button> -->
 
     <div class="opts" [formGroup]="form" aria-label="Optionen">
       <div class="seg seg-mini" role="tablist" aria-label="Ketten-Option">
-        <label class="seg-btn" [class.active]="form.value.mode === 'withChain'">
+        <label
+          class="seg-btn btn secondary"
+          [class.active]="form.value.mode === 'withChain'"
+        >
           <input
             class="visually-hidden"
             type="radio"
@@ -131,7 +134,10 @@
           />
           <span>Kette save</span>
         </label>
-        <label class="seg-btn" [class.active]="form.value.mode === 'maybe'">
+        <label
+          class="seg-btn btn secondary"
+          [class.active]="form.value.mode === 'maybe'"
+        >
           <input
             class="visually-hidden"
             type="radio"
@@ -140,7 +146,10 @@
           />
           <span>vielleicht Kette?</span>
         </label>
-        <label class="seg-btn" [class.active]="form.value.mode === 'noChain'">
+        <label
+          class="seg-btn btn secondary"
+          [class.active]="form.value.mode === 'noChain'"
+        >
           <input
             class="visually-hidden"
             type="radio"
@@ -151,12 +160,15 @@
         </label>
       </div>
 
-      <!--
-      <label class="cb">
-        <input type="checkbox" formControlName="equalize" />
-        <span>gleiche Spielzeit</span>
-      </label>
-      -->
+      <button
+        class="btn secondary toggle-equalize"
+        type="button"
+        (click)="toggleEqualize()"
+        [attr.aria-pressed]="form.value.equalize"
+        [class.active]="form.value.equalize"
+      >
+        Gleiche Spielzeit: {{ form.value.equalize ? "AN" : "AUS" }}
+      </button>
     </div>
   </header>
 
@@ -233,69 +245,86 @@
   </section>
 
   @if (ingameMode()) {
-  <div class="ingame-overlay" [class.portrait]="ingamePortraitMode()">
+  <div class="ingame-overlay">
     <div class="ingame-overlay__formation">
-      <div class="ingame-formation" [class.anim-on]="animGate()">
-        <div class="ingame-board">
-          <div class="ingame-top">
-            @if (topRow().length === 4) { @for (s of topRow(); let idx = $index; track
-            trackTop(idx, s)) {
-            <article class="slot-card anim" [ngStyle]="animStyle('top', idx)">
-              <figure class="avatar">
-                <img [src]="s.player.profilePicture" [alt]="s.player.name" />
-              </figure>
-              <div class="name">{{ s.player.name }}</div>
-              <div class="tag">{{ s.kindLabel }}</div>
-            </article>
-            } } @else { @for (_ of [0,1,2,3]; let idx = $index; track idx) {
-            <article class="slot-card skeleton">
-              <figure class="avatar skeleton-box"></figure>
-              <div class="name skeleton-line"></div>
-              <div class="tag skeleton-pill"></div>
-            </article>
-            } }
-          </div>
-
-          <div class="ingame-bottom">
-            <button
-              class="btn hero primary ingame-btn"
-              type="button"
-              (click)="generate()"
-              [disabled]="teamLoading()"
-              [class.burst]="bursting()"
-            >
-              GENERIEREN
-            </button>
-
-            <div class="ingame-quick">
-              @if (quickSlot(); as q) { @for (_ of [q]; track trackByQuick()) {
-              <article
-                class="slot-card quick-card anim"
-                [ngStyle]="animStyle('quick', 0)"
-              >
+      <div class="ingame-rotor">
+        <div class="ingame-formation formation" [class.anim-on]="animGate()">
+          <div class="ingame-board">
+            <div class="ingame-top">
+              @if (topRow().length === 4) { @for (s of topRow(); let idx =
+              $index; track trackTop(idx, s)) {
+              <article class="slot-card anim" [ngStyle]="animStyle('top', idx)">
                 <figure class="avatar">
-                  <img [src]="q.player.profilePicture" [alt]="q.player.name" />
+                  <img [src]="s.player.profilePicture" [alt]="s.player.name" />
                 </figure>
-                <div class="name">{{ q.player.name }}</div>
-                <div class="tag">{{ q.kindLabel }}</div>
+                <div class="text">
+                  <div class="name">{{ s.player.name }}</div>
+                  <div class="tag">{{ s.kindLabel }}</div>
+                </div>
               </article>
-              } } @else {
-              <article class="slot-card quick-card skeleton">
+              } } @else { @for (_ of [0,1,2,3]; let idx = $index; track idx) {
+              <article class="slot-card skeleton">
                 <figure class="avatar skeleton-box"></figure>
-                <div class="name skeleton-line short"></div>
-                <div class="tag skeleton-pill"></div>
+                <div class="text">
+                  <div class="name skeleton-line"></div>
+                  <div class="tag skeleton-pill"></div>
+                </div>
               </article>
-              }
+              } }
             </div>
 
-            <button
-              class="btn secondary ingame-btn"
-              type="button"
-              (click)="toggleIngame()"
-              [disabled]="teamLoading()"
-            >
-              INGAME: {{ ingameMode() ? 'AN' : 'AUS' }}
-            </button>
+            <div class="ingame-bottom">
+              <div class="btnContainer">
+                <button
+                  class="btn hero primary ingame-btn cta"
+                  type="button"
+                  (click)="generate()"
+                  [disabled]="teamLoading()"
+                  [class.burst]="bursting()"
+                >
+                  GENERIEREN
+                </button>
+              </div>
+
+              <div class="ingame-quick">
+                @if (quickSlot(); as q) { @for (_ of [q]; track trackByQuick())
+                {
+                <article
+                  class="slot-card quick-card anim"
+                  [ngStyle]="animStyle('quick', 0)"
+                >
+                  <figure class="avatar">
+                    <img
+                      [src]="q.player.profilePicture"
+                      [alt]="q.player.name"
+                    />
+                  </figure>
+                  <div class="text">
+                    <div class="name">{{ q.player.name }}</div>
+                    <div class="tag">{{ q.kindLabel }}</div>
+                  </div>
+                </article>
+                } } @else {
+                <article class="slot-card quick-card skeleton">
+                  <figure class="avatar skeleton-box"></figure>
+                  <div class="text">
+                    <div class="name skeleton-line short"></div>
+                    <div class="tag skeleton-pill"></div>
+                  </div>
+                </article>
+                }
+              </div>
+              <div class="btnContainer">
+                <button
+                  class="btn secondary ingame-btn cta"
+                  type="button"
+                  (click)="toggleIngame()"
+                  [disabled]="teamLoading()"
+                >
+                  INGAME: {{ ingameMode() ? "AN" : "AUS" }}
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
