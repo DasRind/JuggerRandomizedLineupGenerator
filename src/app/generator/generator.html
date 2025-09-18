@@ -122,42 +122,36 @@
 
     <div class="opts" [formGroup]="form" aria-label="Optionen">
       <div class="seg seg-mini" role="tablist" aria-label="Ketten-Option">
-        <label
+        <button
           class="seg-btn btn secondary"
+          type="button"
+          role="tab"
           [class.active]="form.value.mode === 'withChain'"
+          [attr.aria-selected]="form.value.mode === 'withChain'"
+          (click)="setMode('withChain')"
         >
-          <input
-            class="visually-hidden"
-            type="radio"
-            value="withChain"
-            formControlName="mode"
-          />
-          <span>Kette save</span>
-        </label>
-        <label
+          Kette save
+        </button>
+        <button
           class="seg-btn btn secondary"
+          type="button"
+          role="tab"
           [class.active]="form.value.mode === 'maybe'"
+          [attr.aria-selected]="form.value.mode === 'maybe'"
+          (click)="setMode('maybe')"
         >
-          <input
-            class="visually-hidden"
-            type="radio"
-            value="maybe"
-            formControlName="mode"
-          />
-          <span>vielleicht Kette?</span>
-        </label>
-        <label
+          vielleicht Kette?
+        </button>
+        <button
           class="seg-btn btn secondary"
+          type="button"
+          role="tab"
           [class.active]="form.value.mode === 'noChain'"
+          [attr.aria-selected]="form.value.mode === 'noChain'"
+          (click)="setMode('noChain')"
         >
-          <input
-            class="visually-hidden"
-            type="radio"
-            value="noChain"
-            formControlName="mode"
-          />
-          <span>ohne Kette?!</span>
-        </label>
+          ohne Kette?!
+        </button>
       </div>
 
       <button

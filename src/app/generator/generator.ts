@@ -542,6 +542,11 @@ export class GeneratorComponent implements OnDestroy, AfterViewInit {
     this.form.controls.equalize.setValue(!current, { emitEvent: true });
   }
 
+  setMode(mode: Mode) {
+    if (this.form.controls.mode.value === mode) return;
+    this.form.controls.mode.setValue(mode, { emitEvent: true });
+  }
+
   private scrollToTeams() {
     if (typeof window === 'undefined') return;
     const el = document.getElementById('presetSection');
