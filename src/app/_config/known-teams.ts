@@ -51,6 +51,13 @@ export const KNOWN_TEAMS: KnownTeamConfig[] = [
     file: 'knownTeams/Resterampe_S_d.randomizer',
     preview: TEAM_PLACEHOLDER,
   },
+  {
+    id: 'bonndage',
+    label: 'BONNdage',
+    source: 'remote',
+    file: 'knownTeams/BONNdage.randomizer',
+    preview: TEAM_PLACEHOLDER,
+  },
 ];
 
 export function findKnownTeam(
