@@ -160,6 +160,7 @@
         type="button"
         (click)="toggleIngame()"
         [disabled]="teamLoading()"
+        [class.active]="ingameMode()"
       >
         INGAME: {{ ingameMode() ? "AN" : "AUS" }}
       </button>

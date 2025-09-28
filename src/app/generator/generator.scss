@@ -426,17 +426,25 @@ $blue-border: #7d92bf;
 .ingame-toggle {
   font-size: 14px;
   padding: 10px 18px;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 0.03em;
-  background: linear-gradient(135deg, #2e5bd6, #6d9bff);
-  border-color: rgba(68, 110, 210, 0.65);
-  color: #f5f8ff;
-  box-shadow: 0 6px 16px rgba(41, 72, 150, 0.24);
+  background: #f7f9fc;
+  border-color: rgba(125, 146, 191, 0.28);
+  color: $ink-soft;
   margin: 0;
+
+  &:hover:not(:disabled) {
+    background: rgba(125, 146, 191, 0.16);
+  }
+
+  &.active {
+    background: linear-gradient(135deg, #2e5bd6, #6d9bff);
+    border-color: rgba(68, 110, 210, 0.65);
+    color: #f4f7ff;
+  }
 
   &:disabled {
     opacity: 0.6;
-    box-shadow: none;
     cursor: not-allowed;
   }
 }
@@ -1228,7 +1236,6 @@ $blue-border: #7d92bf;
   width: 100%;
   min-height: clamp(40px, calc(var(--ing-short) * 0.1), 80px);
   white-space: break-spaces;
-    word-break: break-all;
 }
 
 .ingame-btn.cta {
