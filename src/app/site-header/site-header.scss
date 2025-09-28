@@ -15,7 +15,7 @@ $content-width: min(1100px, 94vw);
   left: 0;
   width: 100%;
   z-index: 1600;
-  background: linear-gradient(90deg, $ink 0%, #23424e 55%, $brand-blue 100%);
+  background: linear-gradient(90deg, #428fec 0, #1041cf 100%);
   color: #fff;
   padding: 10px clamp(12px, 3vw, 20px);
   box-shadow: 0 2px 0 rgba(255, 255, 255, 0.06) inset,

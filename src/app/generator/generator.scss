@@ -677,7 +677,6 @@ $blue-border: #7d92bf;
   }
   .tag {
     margin: 2px 0 0 0;
-    font-size: 12px;
     background: #e6efff;
     border: 1px solid #96a9d4;
     border-radius: 12px; /* weniger rund für mehrzeilig */
@@ -851,7 +850,6 @@ $blue-border: #7d92bf;
   .quick-card {
     flex-direction: column !important;
   }
-
 }
 
 /* Desktop-Boost für Formation */
@@ -1170,7 +1168,7 @@ $blue-border: #7d92bf;
   height: 100%;
   width: min(100%, var(--ing-long));
   display: flex;
-    padding: var(--ing-gap);
+  padding: var(--ing-gap);
 
   align-items: stretch;
 }
@@ -1210,7 +1208,7 @@ $blue-border: #7d92bf;
 
   .slot-card {
     display: flex !important;
-    flex-direction: column ;
+    flex-direction: column;
     justify-content: center !important;
   }
 }
@@ -1221,7 +1219,6 @@ $blue-border: #7d92bf;
   justify-content: center;
   min-width: 0;
   container-type: inline-size;
-
 }
 
 .ingame-bottom .btnContainer:nth-child(1) {
@@ -1239,8 +1236,7 @@ $blue-border: #7d92bf;
 }
 
 .ingame-btn.cta {
-  padding:
-   4px;
+  padding: 4px;
   border-radius: clamp(10px, calc(var(--ing-short) * 0.035), 22px);
   font-size: clamp(15px, calc(var(--ing-short) * 0.07), 28px);
   line-height: 1.1;
@@ -1323,7 +1319,6 @@ $blue-border: #7d92bf;
 
   .text {
     flex-direction: column;
-
   }
 }
 
