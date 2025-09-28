@@ -190,7 +190,10 @@ $blue-border: #7d92bf;
   height: 100%;
   width: 100%;
   overflow: hidden;
-  padding-bottom: clamp(4px, calc(var(--ing-short) * 0.015), 16px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 
   /* dynamische Größensteuerung für das Overlay */
   --ing-long: max(100vw, 100vh);
@@ -203,11 +206,16 @@ $blue-border: #7d92bf;
   --ing-tag-size: clamp(10px, calc(var(--ing-short) * 0.045), 18px);
   --ing-tag-pad-y: clamp(3px, calc(var(--ing-short) * 0.012), 10px);
   --ing-tag-pad-x: clamp(6px, calc(var(--ing-short) * 0.035), 16px);
+  gap: var(--ing-gap);
 }
 
 .ingame-overlay__formation {
   height: 100%;
   width: 100%;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .ingame-overlay__controls {
@@ -815,6 +823,7 @@ $blue-border: #7d92bf;
   transform: translateY(6px);
   background: linear-gradient(180deg, #eaf9ef 0%, #ffffff 100%);
   border: 1px solid #d8e2ff;
+  flex-direction: row !important;
 
   box-shadow: 0 8px 22px rgba(126, 191, 138, 0.22);
 }
@@ -1126,8 +1135,18 @@ $blue-border: #7d92bf;
 }
 
 /* Ingame Layout */
+
+.ingame-overlay .formation {
+  margin-top: 0;
+}
+
 .ingame-formation {
   height: 100%;
+  width: min(100%, var(--ing-long));
+  display: flex;
+    padding: var(--ing-gap);
+
+  align-items: stretch;
 }
 
 .ingame-board {
@@ -1135,18 +1154,24 @@ $blue-border: #7d92bf;
   flex-direction: column;
   gap: var(--ing-gap);
   height: 100%;
-  padding: var(--ing-gap);
   min-height: 0;
+  width: 100%;
 }
 
 .ingame-top {
-  flex: 1 1 0;
+  flex: 2 1 0;
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: var(--ing-card-gap);
   align-items: stretch;
   justify-items: stretch;
   min-height: 0;
+
+  .slot-card {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+  }
 }
 
 .ingame-bottom {
@@ -1156,6 +1181,12 @@ $blue-border: #7d92bf;
   gap: var(--ing-card-gap);
   align-items: stretch;
   min-height: 0;
+
+  .slot-card {
+    display: flex !important;
+    flex-direction: column ;
+    justify-content: center !important;
+  }
 }
 
 .ingame-bottom .btnContainer {
@@ -1196,6 +1227,33 @@ $blue-border: #7d92bf;
   box-shadow: 0 8px 18px rgba(31, 42, 55, 0.1);
 }
 
+.ingame-overlay__hint {
+  display: none;
+  align-items: center;
+  gap: clamp(6px, calc(var(--ing-short) * 0.025), 14px);
+  background: rgba(13, 22, 39, 0.75);
+  border: 1px solid rgba(125, 146, 191, 0.35);
+  border-radius: 999px;
+  padding: clamp(6px, calc(var(--ing-short) * 0.018), 14px)
+    clamp(12px, calc(var(--ing-short) * 0.05), 22px);
+  color: rgba(230, 238, 255, 0.92);
+  font-weight: 600;
+  text-align: center;
+  backdrop-filter: blur(6px);
+  pointer-events: none;
+  max-width: clamp(240px, 90vw, 520px);
+}
+
+.ingame-overlay__hint-icon {
+  font-size: clamp(16px, calc(var(--ing-short) * 0.08), 28px);
+}
+
+@media (orientation: portrait) {
+  .ingame-overlay__hint {
+    display: inline-flex;
+  }
+}
+
 .toggle-equalize {
   text-transform: uppercase;
   font-weight: 700;
@@ -1215,11 +1273,16 @@ $blue-border: #7d92bf;
   justify-content: center;
   min-width: 0;
   min-height: 0;
+  flex-direction: row;
+
+  .text {
+    flex-direction: column;
+
+  }
 }
 
 .ingame-quick .slot-card {
   width: 100%;
-  max-width: clamp(180px, calc(var(--ing-short) * 0.75), 320px);
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
   align-items: center;
@@ -1242,7 +1305,7 @@ $blue-border: #7d92bf;
 
 .ingame-overlay .slot-card .avatar {
   width: 100%;
-  max-width: var(--ing-avatar-size);
+  height: auto;
   aspect-ratio: 1 / 1;
   border-width: 3px;
   border-radius: clamp(18px, calc(var(--ing-avatar-size) * 0.12), 36px);
@@ -1272,7 +1335,6 @@ $blue-border: #7d92bf;
   text-align: left;
   word-break: break-word;
   hyphens: auto;
-  flex: 1 1 auto;
   min-width: 0;
 }
 
@@ -1288,7 +1350,6 @@ $blue-border: #7d92bf;
 
 @media (min-aspect-ratio: 1/1) {
   .ingame-overlay .slot-card .text {
-    flex-direction: row;
     align-items: center;
     gap: clamp(6px, calc(var(--ing-short) * 0.03), 14px);
   }
@@ -1298,22 +1359,7 @@ $blue-border: #7d92bf;
   }
 }
 
-/* Fläche zum Rotieren/Skalieren */
-.ingame-rotor {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform-origin: center center;
-  transform: translate(-50%, -50%) rotate(var(--ing-rot, 0deg))
-    scale(var(--ing-scale, 1));
-}
-
-.ingame-overlay .ingame-rotor,
 .ingame-overlay .ingame-board {
   width: 100%;
   height: 100%;
-}
-
-.ingame-rotor.measuring {
-  visibility: hidden;
 }

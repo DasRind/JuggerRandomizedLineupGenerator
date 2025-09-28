@@ -1,12 +1,4 @@
-import {
-  Component,
-  HostListener,
-  OnDestroy,
-  computed,
-  inject,
-  signal,
-  AfterViewInit,
-} from '@angular/core';
+import { Component, OnDestroy, computed, inject, signal } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { LineupService } from '../lineup-service';
@@ -43,16 +35,12 @@ const TEAM_SIZE = 5;
   templateUrl: './generator.html',
   styleUrls: ['./generator.scss'],
 })
-export class GeneratorComponent implements OnDestroy, AfterViewInit {
+export class GeneratorComponent implements OnDestroy {
   private fb = inject(FormBuilder);
   private store = inject(LineupService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private teamLoader = inject(TeamLoaderService);
-
-  private boardResizeObs: ResizeObserver | null = null;
-  private mmPortrait: MediaQueryList | null = null;
-  private mmPortraitHandler: (() => void) | null = null;
 
   private teamLoadToken: symbol | null = null;
 
@@ -120,24 +108,6 @@ export class GeneratorComponent implements OnDestroy, AfterViewInit {
 
   ngOnDestroy() {
     this.lockBodyScroll(false);
-    if (this.mmPortrait && this.mmPortraitHandler) {
-      try {
-        this.mmPortrait.removeEventListener('change', this.mmPortraitHandler);
-      } catch {
-        /* Safari */ /* @ts-ignore */ this.mmPortrait.removeListener(
-          this.mmPortraitHandler
-        );
-      }
-    }
-    this.mmPortrait = null;
-    this.mmPortraitHandler = null;
-    this.disconnectBoardObserver();
-  }
-
-  ngAfterViewInit(): void {
-    if (typeof window !== 'undefined' && 'matchMedia' in window) {
-      this.mmPortrait = window.matchMedia('(orientation: portrait)');
-    }
   }
 
   animGate = signal(false); // false = ausgeblendet (Reset), true = animieren
@@ -528,13 +498,7 @@ export class GeneratorComponent implements OnDestroy, AfterViewInit {
   toggleIngame() {
     const next = !this.ingameMode();
     this.ingameMode.set(next);
-    if (next) {
-      this.connectBoardObserver();
-      this.lockBodyScroll(true);
-    } else {
-      this.disconnectBoardObserver();
-      this.lockBodyScroll(false);
-    }
+    this.lockBodyScroll(next);
   }
 
   toggleEqualize() {
@@ -551,32 +515,6 @@ export class GeneratorComponent implements OnDestroy, AfterViewInit {
     if (typeof window === 'undefined') return;
     const el = document.getElementById('presetSection');
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
-
-  private connectBoardObserver() {
-    if (this.boardResizeObs) return;
-    if (typeof ResizeObserver === 'undefined') return;
-    const overlay = document.querySelector(
-      '.ingame-overlay'
-    ) as HTMLElement | null;
-    if (!overlay) {
-      const raf =
-        typeof window !== 'undefined' && window.requestAnimationFrame
-          ? window.requestAnimationFrame.bind(window)
-          : null;
-      if (raf) raf(() => this.connectBoardObserver());
-      return;
-    }
-    this.boardResizeObs = new ResizeObserver((entries) => {
-      const rect = entries[0]?.contentRect;
-    });
-    this.boardResizeObs.observe(overlay);
-  }
-  private disconnectBoardObserver() {
-    if (this.boardResizeObs) {
-      this.boardResizeObs.disconnect();
-      this.boardResizeObs = null;
-    }
   }
 
   private lockBodyScroll(active: boolean) {

@@ -111,14 +111,14 @@
     >
       GENERIEREN
     </button>
-    <!-- <button
+    <button
       class="btn tertiary ingame-toggle"
       type="button"
       (click)="toggleIngame()"
       [disabled]="teamLoading()"
     >
       INGAME: {{ ingameMode() ? "AN" : "AUS" }}
-    </button> -->
+    </button>
 
     <div class="opts" [formGroup]="form" aria-label="Optionen">
       <div class="seg seg-mini" role="tablist" aria-label="Ketten-Option">
@@ -240,10 +240,13 @@
 
   @if (ingameMode()) {
   <div class="ingame-overlay">
+    <div class="ingame-overlay__hint" role="note">
+      <span class="ingame-overlay__hint-icon" aria-hidden="true">↻</span>
+      Für bessere Übersicht bitte ins Querformat wechseln.
+    </div>
     <div class="ingame-overlay__formation">
-      <div class="ingame-rotor">
-        <div class="ingame-formation formation" [class.anim-on]="animGate()">
-          <div class="ingame-board">
+      <div class="ingame-formation formation" [class.anim-on]="animGate()">
+        <div class="ingame-board">
             <div class="ingame-top">
               @if (topRow().length === 4) { @for (s of topRow(); let idx =
               $index; track trackTop(idx, s)) {
@@ -319,7 +322,6 @@
                 </button>
               </div>
             </div>
-          </div>
         </div>
       </div>
     </div>
