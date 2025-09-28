@@ -424,9 +424,21 @@ $blue-border: #7d92bf;
 }
 
 .ingame-toggle {
-  font-size: 13px;
-  padding: 8px 16px;
-  margin-top: 6px;
+  font-size: 14px;
+  padding: 10px 18px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  background: linear-gradient(135deg, #2e5bd6, #6d9bff);
+  border-color: rgba(68, 110, 210, 0.65);
+  color: #f5f8ff;
+  box-shadow: 0 6px 16px rgba(41, 72, 150, 0.24);
+  margin: 0;
+
+  &:disabled {
+    opacity: 0.6;
+    box-shadow: none;
+    cursor: not-allowed;
+  }
 }
 
 @keyframes shine {
@@ -1215,11 +1227,13 @@ $blue-border: #7d92bf;
 .ingame-bottom .btn.cta {
   width: 100%;
   min-height: clamp(40px, calc(var(--ing-short) * 0.1), 80px);
+  white-space: break-spaces;
+    word-break: break-all;
 }
 
 .ingame-btn.cta {
-  padding: clamp(10px, calc(var(--ing-short) * 0.06), 24px)
-    clamp(16px, calc(var(--ing-short) * 0.1), 32px);
+  padding:
+   4px;
   border-radius: clamp(10px, calc(var(--ing-short) * 0.035), 22px);
   font-size: clamp(15px, calc(var(--ing-short) * 0.07), 28px);
   line-height: 1.1;
@@ -1227,12 +1241,16 @@ $blue-border: #7d92bf;
   align-items: center;
   justify-content: center;
   height: 100%;
+  white-space: nowrap;
+  text-align: center;
+  min-width: 0;
 }
 
 .btn.secondary.ingame-btn.cta {
-  background: #ffffff;
-  border-color: rgba(125, 146, 191, 0.35);
-  box-shadow: 0 8px 18px rgba(31, 42, 55, 0.1);
+  background: linear-gradient(135deg, #2e5bd6, #6d9bff);
+  border-color: rgba(68, 110, 210, 0.65);
+  box-shadow: 0 10px 24px rgba(34, 58, 120, 0.26);
+  color: #f4f7ff;
 }
 
 .ingame-overlay__hint {
@@ -1262,6 +1280,11 @@ $blue-border: #7d92bf;
     display: inline-flex;
   }
 
+  .ingame-btn.cta {
+    font-size: clamp(12px, calc(var(--ing-short) * 0.05), 15px);
+    padding: clamp(8px, calc(var(--ing-short) * 0.05), 2px)
+      clamp(14px, calc(var(--ing-short) * 0.1), 2px);
+  }
 
   .ingame-top {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1366,7 +1389,6 @@ $blue-border: #7d92bf;
 @media (min-aspect-ratio: 1/1) {
   .ingame-overlay .slot-card .text {
     align-items: center;
-    gap: clamp(6px, calc(var(--ing-short) * 0.03), 14px);
   }
 
   .ingame-overlay .slot-card .tag {

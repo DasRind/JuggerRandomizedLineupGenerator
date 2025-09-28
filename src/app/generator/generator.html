@@ -111,15 +111,6 @@
     >
       GENERIEREN
     </button>
-    <button
-      class="btn tertiary ingame-toggle"
-      type="button"
-      (click)="toggleIngame()"
-      [disabled]="teamLoading()"
-    >
-      INGAME: {{ ingameMode() ? "AN" : "AUS" }}
-    </button>
-
     <div class="opts" [formGroup]="form" aria-label="Optionen">
       <div class="seg seg-mini" role="tablist" aria-label="Ketten-Option">
         <button
@@ -162,6 +153,15 @@
         [class.active]="form.value.equalize"
       >
         Gleiche Spielzeit: {{ form.value.equalize ? "AN" : "AUS" }}
+      </button>
+
+      <button
+        class="btn ingame-toggle"
+        type="button"
+        (click)="toggleIngame()"
+        [disabled]="teamLoading()"
+      >
+        INGAME: {{ ingameMode() ? "AN" : "AUS" }}
       </button>
     </div>
   </header>
