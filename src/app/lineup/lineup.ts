@@ -31,6 +31,12 @@ const PLACEHOLDER_AVATAR =
     <path d="M36 130c10-22 34-26 44-26s34 4 44 26" fill="none" stroke="#1f2a37" stroke-width="4" stroke-linecap="round"/>
   </svg>`);
 
+type PlayerChip = {
+  id: string;
+  label: string;
+  kind: 'quick' | 'spar' | 'chain';
+};
+
 /* ---------- Component ---------- */
 
 @Component({
@@ -377,9 +383,40 @@ export class LineupComponent {
   }
 
   /* Anzeige-Tags */
-  chipList(p: Player): string[] {
-    const chainChips = p.chains.map((c) => `Kette (${c})`);
-    return [...p.spars, ...p.quick, ...chainChips];
+  chipList(p: Player): PlayerChip[] {
+    const chips: PlayerChip[] = [];
+    const slug = norm(p.name).toLowerCase() || 'player';
+
+    p.quick.forEach((raw, idx) => {
+      const text = norm(raw) || this.quickLabel;
+      chips.push({
+        id: `quick-${slug}-${idx}-${text.toLowerCase()}`,
+        label: text,
+        kind: 'quick',
+      });
+    });
+
+    p.spars.forEach((raw, idx) => {
+      const text = norm(raw);
+      if (!text) return;
+      chips.push({
+        id: `spar-${slug}-${idx}-${text.toLowerCase()}`,
+        label: text,
+        kind: 'spar',
+      });
+    });
+
+    p.chains.forEach((raw, idx) => {
+      const mode = norm(raw);
+      if (!mode) return;
+      chips.push({
+        id: `chain-${slug}-${idx}-${mode.toLowerCase()}`,
+        label: `Kette · ${mode}`,
+        kind: 'chain',
+      });
+    });
+
+    return chips;
   }
 
   /* ---------- Save / Load ---------- */

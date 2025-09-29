@@ -3,7 +3,7 @@ import { ReactiveFormsModule, FormBuilder, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { LineupService } from '../lineup-service';
 import { Lineup, Player } from '../_interfaces/lineupInterface';
-import { NgStyle, NgTemplateOutlet } from '@angular/common';
+import { NgClass, NgStyle, NgTemplateOutlet } from '@angular/common';
 import { TeamLoaderService } from '../team-loader.service';
 import { TEAM_PLACEHOLDER, findKnownTeam } from '../_config/known-teams';
 
@@ -31,7 +31,7 @@ const TEAM_SIZE = 5;
 @Component({
   selector: 'app-generator',
   standalone: true,
-  imports: [ReactiveFormsModule, NgStyle, NgTemplateOutlet, RouterModule],
+  imports: [ReactiveFormsModule, NgStyle, NgTemplateOutlet, NgClass, RouterModule],
   templateUrl: './generator.html',
   styleUrls: ['./generator.scss'],
 })
@@ -104,6 +104,27 @@ export class GeneratorComponent implements OnDestroy {
       const teamId = params.get('team');
       void this.applyTeamFromParam(teamId);
     });
+  }
+
+  tagClass(role: Role | null | undefined): string {
+    switch (role) {
+      case 'Quick':
+        return 'tag--quick';
+      case 'Kette':
+        return 'tag--chain';
+      case 'Pompfe':
+        return 'tag--spar';
+      default:
+        return '';
+    }
+  }
+
+  cardClass(role: Role | null | undefined): Record<string, boolean> {
+    return {
+      'slot-card--quick': role === 'Quick',
+      'slot-card--chain': role === 'Kette',
+      'slot-card--spar': role === 'Pompfe',
+    };
   }
 
   ngOnDestroy() {

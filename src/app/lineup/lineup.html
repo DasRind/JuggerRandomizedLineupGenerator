@@ -57,8 +57,14 @@
         <div class="info">
           <div class="name">{{ p.name }}</div>
           <div class="chips">
-            @for (chip of chipList(p); track $index) {
-            <span class="chip">{{ chip }}</span>
+            @for (chip of chipList(p); track chip.id) {
+            <span
+              class="chip"
+              [class.chip--quick]="chip.kind === 'quick'"
+              [class.chip--spar]="chip.kind === 'spar'"
+              [class.chip--chain]="chip.kind === 'chain'"
+              >{{ chip.label }}</span
+            >
             }
           </div>
         </div>

@@ -3,12 +3,16 @@
     <div class="line">
       @if (topRow().length === 4) { @for (s of topRow(); let idx = $index; track
       trackTop(idx, s)) {
-      <article class="slot-card anim" [ngStyle]="animStyle('top', idx)">
+      <article
+        class="slot-card anim"
+        [ngStyle]="animStyle('top', idx)"
+        [ngClass]="cardClass(s.role)"
+      >
         <figure class="avatar">
           <img [src]="s.player.profilePicture" [alt]="s.player.name" />
         </figure>
         <div class="name">{{ s.player.name }}</div>
-        <div class="tag">{{ s.kindLabel }}</div>
+        <div class="tag" [ngClass]="tagClass(s.role)">{{ s.kindLabel }}</div>
       </article>
       } } @else { @for (_ of [0,1,2,3]; let idx = $index; track idx) {
       <article class="slot-card skeleton">
@@ -29,7 +33,7 @@
           <img [src]="q.player.profilePicture" [alt]="q.player.name" />
         </figure>
         <div class="name">{{ q.player.name }}</div>
-        <div class="tag">{{ q.kindLabel }}</div>
+        <div class="tag" [ngClass]="tagClass(q.role)">{{ q.kindLabel }}</div>
       </article>
       } } @else {
       <article class="slot-card quick-card skeleton">
@@ -71,17 +75,19 @@
         </div>
       </div>
       <a
-        class="btn primary team-status__edit"
+        class="team-status__link"
         [routerLink]="['/kader']"
         [queryParams]="teamQuery()"
       >
         Kader bearbeiten
       </a>
       <button
-        class="btn tertiary team-status__action"
+        class="team-status__switch"
         type="button"
         (click)="goToInput()"
         [disabled]="teamLoading()"
+        [attr.aria-label]="teamLoading() ? 'Team wird geladen' : 'Team wechseln'"
+        title="Team wechseln"
       >
         Team wechseln
       </button>
@@ -251,13 +257,17 @@
           <div class="ingame-top">
             @if (topRow().length === 4) { @for (s of topRow(); let idx = $index;
             track trackTop(idx, s)) {
-            <article class="slot-card anim" [ngStyle]="animStyle('top', idx)">
+            <article
+              class="slot-card anim"
+              [ngStyle]="animStyle('top', idx)"
+              [ngClass]="cardClass(s.role)"
+            >
               <figure class="avatar">
                 <img [src]="s.player.profilePicture" [alt]="s.player.name" />
               </figure>
               <div class="text">
                 <div class="name">{{ s.player.name }}</div>
-                <div class="tag">{{ s.kindLabel }}</div>
+                <div class="tag" [ngClass]="tagClass(s.role)">{{ s.kindLabel }}</div>
               </div>
             </article>
             } } @else { @for (_ of [0,1,2,3]; let idx = $index; track idx) {
@@ -295,7 +305,7 @@
                 </figure>
                 <div class="text">
                   <div class="name">{{ q.player.name }}</div>
-                  <div class="tag">{{ q.kindLabel }}</div>
+                  <div class="tag" [ngClass]="tagClass(q.role)">{{ q.kindLabel }}</div>
                 </div>
               </article>
               } } @else {

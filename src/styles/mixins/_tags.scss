@@ -1,0 +1,29 @@
+@mixin fancy-tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 4px 18px;
+  border-radius: 999px;
+  border: 1px solid var(--tag-border-base, var(--tag-border));
+  background: linear-gradient(
+    135deg,
+    var(--tag-bg-base, var(--tag-bg)),
+    var(--tag-bg-accent-base, var(--tag-bg-accent))
+  );
+  color: var(--tag-text-base, var(--tag-text));
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1.1;
+  text-align: center;
+  white-space: normal;
+  word-break: break-word;
+  min-height: 26px;
+  font-size: clamp(10px, 1.5vw, 12px);
+  box-shadow: var(--tag-shadow);
+  position: relative;
+  isolation: isolate;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+  cursor: default;
+}

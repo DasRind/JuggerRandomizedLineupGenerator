@@ -1,6 +1,6 @@
-$ink: #1f2a37;
-$blue: #cfe0ff;
-$blue-border: #7d92bf;
+$ink: var(--ink);
+$blue: var(--blue);
+$blue-border: var(--blue-border);
 
 /* Hero: volle Höhe, Inhalt mittig */
 .hero {
@@ -11,7 +11,7 @@ $blue-border: #7d92bf;
   align-items: center; /* horizontal mittig */
   text-align: center;
   padding: 24px 16px;
-  color: $ink;
+  color: var(--color-text);
   box-sizing: border-box;
 }
 
@@ -25,7 +25,7 @@ $blue-border: #7d92bf;
 }
 .subtitle {
   margin: 0;
-  color: #60738a;
+  color: var(--color-text-muted);
   font-style: italic;
 }
 .brand {
@@ -56,10 +56,10 @@ $blue-border: #7d92bf;
   min-width: 0;
   aspect-ratio: 4 / 3;
   box-sizing: border-box;
-  border: 2px solid $ink;
+  border: 2px solid var(--color-border-strong);
   border-radius: 10px;
   overflow: hidden;
-  background: #fff;
+  background: var(--color-surface);
   margin: 5px;
 
   /* Responsive: Umbrechen bei sehr kleinen Screens */
@@ -91,8 +91,8 @@ $blue-border: #7d92bf;
   border-radius: 20px;
   font-weight: 800;
   font-size: clamp(16px, 2.4vw, 28px);
-  box-shadow: 0 8px 0 rgba(125, 146, 191, 0.2);
-  transition: transform 0.05s ease, box-shadow 0.05s ease;
+  box-shadow: var(--btn-shadow);
+  transition: transform 0.05s ease, box-shadow 0.1s ease;
   width: fit-content;
 
   @media (max-width: 640px) {
@@ -101,7 +101,7 @@ $blue-border: #7d92bf;
 
   &:active {
     transform: translateY(2px);
-    box-shadow: 0 6px 0 rgba(125, 146, 191, 0.2);
+    box-shadow: var(--btn-shadow-hover);
   }
 }
 

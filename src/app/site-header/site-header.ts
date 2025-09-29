@@ -1,11 +1,14 @@
 import {
   AfterViewInit,
   Component,
+  EffectRef,
   OnDestroy,
   computed,
+  effect,
   inject,
   ElementRef,
   ViewChild,
+  signal,
 } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { TeamLoaderService } from '../team-loader.service';
@@ -23,11 +26,28 @@ export class SiteHeader implements AfterViewInit, OnDestroy {
   @ViewChild('root', { static: true }) headerEl!: ElementRef<HTMLElement>;
   private resizeObs: ResizeObserver | null = null;
   private resizeFallback: (() => void) | null = null;
+  private themeEffect: EffectRef | null = null;
+  private readonly themeKey = 'jr-theme-mode';
+
+  theme = signal<'light' | 'dark'>(this.detectInitialTheme());
+
+  constructor() {
+    if (typeof document !== 'undefined') {
+      this.applyTheme(this.theme());
+    }
+  }
 
   teamQuery = computed(() => {
     const id = this.teamLoader.selectedTeamId();
     return id ? { team: id } : {};
   });
+
+  toggleTheme() {
+    const next = this.theme() === 'dark' ? 'light' : 'dark';
+    this.theme.set(next);
+    this.applyTheme(next);
+    this.persistTheme(next);
+  }
 
   async goToTeams(event: Event) {
     event.preventDefault();
@@ -71,6 +91,12 @@ export class SiteHeader implements AfterViewInit, OnDestroy {
       win.addEventListener('resize', handler);
       this.resizeFallback = () => win.removeEventListener('resize', handler);
     }
+
+    if (!this.themeEffect) {
+      this.themeEffect = effect(() => {
+        this.applyTheme(this.theme());
+      });
+    }
   }
 
   ngOnDestroy(): void {
@@ -84,6 +110,52 @@ export class SiteHeader implements AfterViewInit, OnDestroy {
     }
     if (typeof document !== 'undefined') {
       document.documentElement.style.removeProperty('--site-header-h');
+    }
+    if (this.themeEffect) {
+      this.themeEffect.destroy();
+      this.themeEffect = null;
+    }
+  }
+
+  private detectInitialTheme(): 'light' | 'dark' {
+    if (typeof document === 'undefined') return 'light';
+
+    try {
+      const stored = localStorage.getItem(this.themeKey);
+      if (stored === 'light' || stored === 'dark') {
+        return stored;
+      }
+    } catch (err) {
+      console.warn('Theme preference unavailable', err);
+    }
+
+    if (typeof window !== 'undefined') {
+      try {
+        return window.matchMedia('(prefers-color-scheme: dark)').matches
+          ? 'dark'
+          : 'light';
+      } catch (err) {
+        console.warn('Theme matchMedia unavailable', err);
+      }
+    }
+
+    return 'light';
+  }
+
+  private applyTheme(mode: 'light' | 'dark') {
+    if (typeof document === 'undefined') return;
+    const root = document.documentElement;
+    root.classList.toggle('theme-dark', mode === 'dark');
+    root.classList.toggle('theme-light', mode === 'light');
+    root.setAttribute('data-theme', mode);
+  }
+
+  private persistTheme(mode: 'light' | 'dark') {
+    if (typeof document === 'undefined') return;
+    try {
+      localStorage.setItem(this.themeKey, mode);
+    } catch (err) {
+      console.warn('Theme preference could not be saved', err);
     }
   }
 }

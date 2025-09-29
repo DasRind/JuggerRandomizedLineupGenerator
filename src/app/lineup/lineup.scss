@@ -1,8 +1,10 @@
-$ink: #1f2a37;
-$ink-soft: #60738a;
-$line: #e2e8f8;
-$blue: #cfe0ff;
-$blue-border: #7d92bf;
+@use '../../styles/mixins/tags' as tag;
+
+$ink: var(--color-text);
+$ink-soft: var(--color-text-muted);
+$line: var(--color-border);
+$blue: var(--blue);
+$blue-border: var(--blue-border);
 
 :host {
   display: block;
@@ -65,6 +67,21 @@ $blue-border: #7d92bf;
   text-decoration: none;
   display: inline-flex;
   align-items: center;
+  box-shadow: var(--btn-shadow);
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease,
+    box-shadow 0.2s ease, transform 0.2s ease;
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      box-shadow: var(--btn-shadow-hover);
+      transform: translateY(-1px);
+    }
+  }
+
+  &:active {
+    transform: translateY(1px);
+    box-shadow: color-mix(in srgb, var(--btn-shadow) 65%, transparent 35%);
+  }
 
   &.sm {
     padding: 6px 12px;
@@ -77,16 +94,20 @@ $blue-border: #7d92bf;
   }
   &.ghost {
     background: transparent;
+    border-color: var(--color-border);
+    color: $ink;
+    box-shadow: none;
   }
   &.primary {
-    background: #b7e9c3;
-    border-color: #7ebf8a;
+    background: var(--brand-green-soft);
+    border-color: var(--brand-green);
+    color: var(--primary-btn-text);
   }
 }
 
 .icon {
-  background: #fff;
-  border: 1px solid #cbd5e1;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
   border-radius: 8px;
   width: 34px;
   height: 34px;
@@ -94,10 +115,20 @@ $blue-border: #7d92bf;
   place-content: center;
   cursor: pointer;
   overflow: auto;
+  color: $ink;
+  transition: background 0.2s ease, border-color 0.2s ease,
+    transform 0.2s ease, box-shadow 0.2s ease;
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--btn-shadow);
+    }
+  }
 
   &.danger {
-    border-color: #f2c2c2;
-    color: #b42318;
+    border-color: color-mix(in srgb, var(--error-text) 45%, transparent 55%);
+    color: var(--error-text);
   }
 }
 
@@ -208,7 +239,7 @@ $blue-border: #7d92bf;
 .avatar {
   width: 72px;
   height: 72px;
-  border: 2px solid $ink;
+  border: 2px solid var(--color-border-strong, $line);
   border-radius: 12px;
   overflow: hidden;
 
@@ -236,8 +267,8 @@ $blue-border: #7d92bf;
     place-content: center;
     cursor: pointer;
     border-style: dashed; /* optischer Unterschied: „wählbar“ */
-    border-color: #b8c7e6;
-    background: #fff;
+    border-color: color-mix(in srgb, var(--color-border) 80%, transparent 20%);
+    background: var(--color-surface);
 
     span {
       font-size: 24px;
@@ -260,23 +291,75 @@ $blue-border: #7d92bf;
   gap: 6px;
 }
 .chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: #e6efff;
-  border: 1px solid #96a9d4;
-  border-radius: 999px;
-  padding: 4px 8px;
-  font-size: 12px;
+  @include tag.fancy-tag;
+  padding: 4px 16px;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  --tag-bg-base: var(--tag-bg);
+  --tag-bg-accent-base: var(--tag-bg-accent);
+  --tag-border-base: var(--tag-border);
+  --tag-text-base: var(--tag-text);
+  --tag-dot-base: var(--tag-dot);
+  --tag-dot-glow-base: var(--tag-dot-glow);
+}
 
-  .x {
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 14px;
-    line-height: 1;
-    padding: 0 2px;
-  }
+.chip--quick {
+  --tag-bg-base: color-mix(in srgb, var(--brand-green) 25%, transparent 75%);
+  --tag-bg-accent-base: color-mix(
+    in srgb,
+    var(--brand-green-soft) 65%,
+    transparent 35%
+  );
+  --tag-border-base: color-mix(in srgb, var(--brand-green) 55%, transparent 45%);
+  --tag-text-base: var(--panel-green-text);
+  --tag-dot-base: var(--brand-green);
+  --tag-dot-glow-base: color-mix(
+    in srgb,
+    var(--brand-green) 45%,
+    transparent 55%
+  );
+}
+
+.chip--spar {
+  --tag-bg-base: color-mix(in srgb, var(--accent-blue-soft) 30%, transparent 70%);
+  --tag-bg-accent-base: color-mix(
+    in srgb,
+    var(--accent-blue) 30%,
+    transparent 70%
+  );
+  --tag-border-base: color-mix(in srgb, var(--accent-blue) 50%, transparent 50%);
+  --tag-text-base: var(--panel-blue-text);
+  --tag-dot-base: var(--accent-blue);
+  --tag-dot-glow-base: color-mix(
+    in srgb,
+    var(--accent-blue) 40%,
+    transparent 60%
+  );
+}
+
+.chip--chain {
+  --tag-bg-base: color-mix(
+    in srgb,
+    #f5d99a 46%,
+    transparent 54%
+  );
+  --tag-bg-accent-base: color-mix(
+    in srgb,
+    #d9a950 52%,
+    transparent 48%
+  );
+  --tag-border-base: color-mix(
+    in srgb,
+    #d6aa4b 68%,
+    transparent 32%
+  );
+  --tag-text-base: var(--tag-chain-text);
+  --tag-dot-base: #d8a83d;
+  --tag-dot-glow-base: color-mix(
+    in srgb,
+    #f5d99a 55%,
+    transparent 45%
+  );
 }
 
 .row-actions {
@@ -302,10 +385,35 @@ $blue-border: #7d92bf;
   }
 
   .card {
-    border: 1px solid #d8e2ff;
+    border: 1px solid var(--color-border);
     border-radius: 12px;
     padding: 16px;
-    background: #f8fbff;
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--color-surface) 92%, transparent 8%) 0%,
+      color-mix(in srgb, var(--color-surface-muted) 85%, transparent 15%) 100%
+    );
+    box-shadow: var(--card-shadow);
+    --form-field-bg: color-mix(
+      in srgb,
+      var(--color-surface) 88%,
+      var(--color-bg) 12%
+    );
+    --form-field-border: color-mix(
+      in srgb,
+      var(--color-border) 78%,
+      transparent 22%
+    );
+    --form-field-border-focus: color-mix(
+      in srgb,
+      var(--accent-blue) 52%,
+      var(--form-field-border) 48%
+    );
+    --form-field-glow: color-mix(
+      in srgb,
+      var(--accent-blue) 28%,
+      transparent 72%
+    );
   }
 }
 .row2 {
@@ -319,8 +427,17 @@ $blue-border: #7d92bf;
   box-sizing: border-box;
   padding: 10px 12px;
   border-radius: 10px;
-  border: 1px solid #cbd5e1;
+  border: 1px solid var(--form-field-border, var(--input-border));
   font-size: 14px;
+  background: var(--form-field-bg, var(--input-bg));
+  color: var(--input-text);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease,
+    background 0.2s ease, color 0.2s ease;
+
+  &:focus {
+    border-color: var(--form-field-border-focus, color-mix(in srgb, $blue-border 65%, transparent 35%));
+    box-shadow: 0 0 0 3px var(--form-field-glow, color-mix(in srgb, $blue 35%, transparent 65%));
+  }
 }
 .input.grow {
   width: 100%;
@@ -354,10 +471,10 @@ $blue-border: #7d92bf;
       font-size: 14px;
       line-height: 1;
       padding: 0 4px;
-      color: #666;
+      color: $ink-soft;
 
       &:hover {
-        color: #b00020;
+        color: var(--error-text);
       }
     }
   }
@@ -418,10 +535,10 @@ $blue-border: #7d92bf;
   width: 66px;
   height: 66px;
   border-radius: 16px;
-  border: 1px solid #cbd5e1;
+  border: 1px solid var(--color-border);
   overflow: hidden;
   cursor: pointer;
-  background: #fff;
+  background: var(--color-surface);
 
   img {
     width: 100%;
@@ -441,8 +558,8 @@ $blue-border: #7d92bf;
     place-items: center;
     font-size: 10px;
     font-weight: 700;
-    background: rgba(31, 42, 55, 0.6);
-    color: #fff;
+    background: color-mix(in srgb, var(--ink) 60%, transparent);
+    color: var(--header-text);
     text-transform: uppercase;
     letter-spacing: 0.08em;
     opacity: 0;
@@ -517,16 +634,20 @@ $blue-border: #7d92bf;
   margin-left: 0;
   padding: 6px 10px;
   font-size: clamp(14px, 3.5vw, 16px);
-  border: 1px solid #cbd5e1;
+  border: 1px solid var(--form-field-border, var(--input-border));
   border-radius: 8px;
   outline: none;
   width: auto;
   flex: 1 1 auto;
   max-width: none;
+  background: var(--form-field-bg, var(--input-bg));
+  color: var(--input-text);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease,
+    background 0.2s ease, color 0.2s ease;
 
   &:focus {
-    border-color: $blue-border;
-    box-shadow: 0 0 0 3px rgba(125, 146, 191, 0.2);
+    border-color: var(--form-field-border-focus, color-mix(in srgb, $blue-border 65%, transparent 35%));
+    box-shadow: 0 0 0 3px var(--form-field-glow, color-mix(in srgb, $blue 35%, transparent 65%));
   }
 }
 
