@@ -1,0 +1,3 @@
+@use '../shared/legal-page' as legal;
+
+@include legal.legal-page-styles();

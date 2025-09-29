@@ -1,11 +1,11 @@
 import { Component, computed, signal } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { LineupService } from '../lineup-service';
 import { SiteHeader } from '../site-header/site-header';
 
 @Component({
   selector: 'app-mainpage',
-  imports: [RouterModule, SiteHeader],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, SiteHeader],
   templateUrl: './mainpage.html',
   styleUrl: './mainpage.scss',
 })

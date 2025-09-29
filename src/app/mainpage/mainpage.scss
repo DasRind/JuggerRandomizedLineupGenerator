@@ -9,6 +9,9 @@ $page-w: min(1100px, 94vw);
   margin: 0 auto;
   max-width: $page-w;
   padding: 20px clamp(10px, 3vw, 16px) 20px;
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - var(--site-header-h, 82px));
 
   /* Auf sehr kleinen Screens Platz maximieren */
   @media (max-width: 540px) {
@@ -17,6 +20,76 @@ $page-w: min(1100px, 94vw);
     padding-right: max(6px, env(safe-area-inset-right));
     padding-top: 12px;
     padding-bottom: 12px;
+  }
+}
+
+.page__content {
+  flex: 1 0 auto;
+}
+
+.site-footer {
+  flex-shrink: 0;
+  margin-top: clamp(2rem, 1.6rem + 2vw, 3rem);
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  color: var(--color-text-muted, #4b5563);
+
+  &__divider {
+    height: 1px;
+    width: 100%;
+    background: linear-gradient(
+      to right,
+      transparent,
+      rgba(148, 163, 184, 0.45),
+      transparent
+    );
+  }
+
+  &__nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    font-size: 0.95rem;
+
+    a {
+      color: inherit;
+      text-decoration: none;
+      font-weight: 600;
+      position: relative;
+      padding-bottom: 0.2rem;
+      transition: color 0.2s ease;
+
+      &::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        height: 2px;
+        background: currentColor;
+        opacity: 0;
+        transform: scaleX(0.3);
+        transform-origin: left;
+        transition: opacity 0.2s ease, transform 0.2s ease;
+      }
+
+      &:hover::after,
+      &:focus-visible::after {
+        opacity: 1;
+        transform: scaleX(1);
+      }
+
+      &:hover,
+      &:focus-visible {
+        color: color-mix(in srgb, var(--accent-blue, #2e5bd6) 70%, #2b3648 30%);
+        outline: none;
+      }
+
+      &.is-active {
+        color: var(--accent-blue, #2e5bd6);
+      }
+    }
   }
 }
 

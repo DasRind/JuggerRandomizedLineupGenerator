@@ -1,8 +1,28 @@
 <app-site-header></app-site-header>
 <div class="site-header-spacer" aria-hidden="true"></div>
 <div class="page">
-  <router-outlet></router-outlet>
-  
+  <div class="page__content">
+    <router-outlet></router-outlet>
+  </div>
+
+  <footer class="site-footer" aria-label="Rechtliche Informationen">
+    <div class="site-footer__divider" aria-hidden="true"></div>
+    <nav class="site-footer__nav" aria-label="Footer Navigation">
+      <a
+        routerLink="/impressum"
+        routerLinkActive="is-active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        >Impressum</a
+      >
+      <a
+        routerLink="/datenschutz"
+        routerLinkActive="is-active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        >Datenschutz</a
+      >
+    </nav>
+  </footer>
+
   <!-- Fallback: Zeige Generator, falls kein Child gesetzt ist -->
   <!-- Optional: könnte per Redirect in Routes gelöst sein -->
 </div>

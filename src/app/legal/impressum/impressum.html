@@ -1,0 +1,15 @@
+<section class="legal-shell">
+  @if (loading()) {
+    <div class="legal-state legal-state--loading">
+      <div class="spinner" aria-hidden="true"></div>
+      <p>Impressum wird geladen …</p>
+    </div>
+  } @else if (error()) {
+    <div class="legal-state legal-state--error" role="alert">
+      <p>{{ error() }}</p>
+      <button type="button" (click)="reload()">Erneut versuchen</button>
+    </div>
+  } @else if (html()) {
+    <article class="legal-markdown" [innerHTML]="html()"></article>
+  }
+</section>

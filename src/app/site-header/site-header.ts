@@ -35,6 +35,12 @@ export class SiteHeader implements AfterViewInit, OnDestroy {
     if (typeof document !== 'undefined') {
       this.applyTheme(this.theme());
     }
+
+    if (!this.themeEffect) {
+      this.themeEffect = effect(() => {
+        this.applyTheme(this.theme());
+      });
+    }
   }
 
   teamQuery = computed(() => {
@@ -92,11 +98,6 @@ export class SiteHeader implements AfterViewInit, OnDestroy {
       this.resizeFallback = () => win.removeEventListener('resize', handler);
     }
 
-    if (!this.themeEffect) {
-      this.themeEffect = effect(() => {
-        this.applyTheme(this.theme());
-      });
-    }
   }
 
   ngOnDestroy(): void {
