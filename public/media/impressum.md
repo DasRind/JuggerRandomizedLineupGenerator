@@ -10,7 +10,7 @@ Kreuzbergweg 20
 ## Kontakt
 
 Telefon: auf Anfrage  
-E-Mail: [kontakt@kuh-labs.de](mailto:kontakt@kuh-labs.de)
+E-Mail: [dgrouls03@gmail.com](mailto:dgrouls03@gmail.com)
 
 ## Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV
 
